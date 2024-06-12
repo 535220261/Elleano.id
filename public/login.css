@@ -1,0 +1,83 @@
+/* Reset margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the body */
+body {
+    font-family: var(--bs-font-sans-serif);
+}
+
+/* Container for the form, taking full viewport height */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 56px); /* Adjust for the height of the navbar */
+    margin-top: 56px; /* Offset the height of the navbar */
+}
+
+/* Style for the heading */
+h1 {
+    margin-bottom: 30px;
+}
+
+/* Style for input fields */
+input {
+    font-size: 1rem;
+    width: 300px;
+    padding: 6px 2px; 
+    margin: 10px 0;
+}
+
+/* Style for submit button */
+.sub {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    cursor: pointer;
+    padding: 10px 20px;
+    border: none;
+}
+
+/* Style for the form */
+form {
+    text-align: center;
+    border: 5px solid rgb(172, 171, 170);
+    padding: 20px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style for the footer */
+footer {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    text-align: left;
+}
+
+/* Ensure footer text is not centered */
+footer p, footer ul {
+    margin-left: 20px;
+}
+
+/* Additional styles for footer elements */
+footer ul {
+    list-style-type: none;
+}
+
+footer li {
+    margin-bottom: 10px;
+}
+
+footer a {
+    color: #000;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
