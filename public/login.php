@@ -1,3 +1,71 @@
+<?php
+// Database connection parameters
+$host = "localhost";
+$dbname = "loginacc";
+$user = "postgres";
+$password = "michang47";
+
+// Create a new database connection
+$conn = pg_connect("host=$host dbname=$dbname user=$user password=$password");
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . pg_last_error());
+}
+
+session_start();
+
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Capture form data
+    $name = $_POST['name'];
+    $password = $_POST['password'];
+
+    // Validate data
+    if (empty($name) || empty($password)) {
+        $message = "All fields are required!";
+    } else {
+        // Query the database for user
+        $query = "SELECT id, password, role FROM users WHERE name = $1";
+        $result = pg_query_params($conn, $query, array($name));
+
+        if ($result) {
+            if (pg_num_rows($result) > 0) {
+                $row = pg_fetch_assoc($result);
+                // Verify password
+                if (password_verify($password, $row['password'])) {
+                    // Set session variables
+                    $_SESSION['user_id'] = $row['id'];
+                    $_SESSION['user_name'] = $name;
+                    $_SESSION['user_role'] = $row['role'];
+
+                    // Debugging statement
+                    error_log("User role: " . $_SESSION['user_role']);
+                    
+                    // Redirect based on role
+                    if ($row['role'] == 'admin') {
+                        header("Location: admin.php");
+                    } else {
+                        header("Location: index.php");
+                    }
+                    exit();
+                } else {
+                    $message = "Incorrect password!";
+                }
+            } else {
+                $message = "Account not registered!";
+            }
+        } else {
+            $message = "Error: " . pg_last_error($conn);
+        }
+    }
+}
+
+// Close the database connection
+pg_close($conn);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +77,7 @@
     <title>Login | Elleano Fashion Wears</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="elleano.png">
+    <link rel="icon" type="image/x-icon" href="images/elleano.png">
 
     <!-- Bootstrap icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -23,7 +91,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="index.php"><img src="elleano.png" alt="Logo" style="height: 100px; width: auto;"></a>
+        <a class="navbar-brand" href="index.php"><img src="images/elleano.png" alt="Logo" style="height: 100px; width: auto;"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -54,7 +122,7 @@
             </form>
             <div class="d-flex">
                 <a href="login.php" class="d-flex align-items-center">
-                    <img src="avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
+                    <img src="images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
                 </a>
             </div>
         </div>
@@ -63,7 +131,7 @@
 
 <div class="main-content">
     <div class="login-container">
-        <form action="/login" method="post">
+        <form action="/login.php" method="post">
             <h1>Login</h1>
             <input placeholder="Name" name="name" type="text">
             <br>
@@ -73,11 +141,12 @@
             <h6>Don't have an account?</h6>
             <a href="signup.php">Create a new account</a>
         </form>
+        <div class="message"><?php echo $message; ?></div>
     </div>
 
     <section class="footer flex">
     <div class="footer-logo">
-        <img src="elleano.png" alt="Logo" style="height: 100px; width: auto;">
+        <img src="images/elleano.png" alt="Logo" style="height: 100px; width: auto;">
         <p class="fs-montserrat fs-200">
             Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.
         </p>
@@ -86,39 +155,39 @@
     <div class="social-icons">
         <div class="social-media">
             <h3>Our Social Media</h3>
-            <a href="https://www.tiktok.com/@elleano.id"><img src="tiktok.png" alt="Logo" style="height: 60px; width: auto;"></a>
-            <a href="https://www.instagram.com/elleano.id?igsh=MXByZXFuYjM5MWd4cQ=="><img src="instagram.png" alt="Logo" style="height: 60px; width: auto;"></a>
+            <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktok.png" alt="Logo" style="height: 60px; width: auto;"></a>
+            <a href="https://www.instagram.com/elleano.id?igsh=MXByZXFuYjM5MWd4cQ=="><img src="images/instagram.png" alt="Logo" style="height: 60px; width: auto;"></a>
         </div>
 
         <div class="footer-menu">
             <h3 class="fs-poppins fs-200 bold-800">Official Store</h3>
             <ul>
                 <li>
-                    <a href="https://shopee.co.id/elleano.id"><img src="shopee.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                    <a href="https://shopee.co.id/elleano.id"><img src="images/shopee.png" alt="Logo" style="height: 40px; width: auto;"></a>
                 </li>
                 <li>
-                    <a href="https://www.tokopedia.com/elleanowears"><img src="tokopedia.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                    <a href="https://www.tokopedia.com/elleanowears"><img src="images/tokopedia.png" alt="Logo" style="height: 40px; width: auto;"></a>
                 </li>
                 <li>
-                    <a href="https://www.tiktok.com/@elleano.id"><img src="tiktokshop.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                    <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktokshop.png" alt="Logo" style="height: 40px; width: auto;"></a>
                 </li>
                 <li>
-                    <a href="https://www.lazada.co.id/shop/elleano-id"><img src="lazada.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                    <a href="https://www.lazada.co.id/shop/elleano-id"><img src="images/lazada.png" alt="Logo" style="height: 40px; width: auto;"></a>
                 </li>
             </ul>
             <h3 class="fs-poppins fs-200 bold-800">Shipping Options</h3>
             <ul>
                 <li>
-                    <img src="JNE.png" alt="Logo" style="height: 40px; width: auto;">
+                    <img src="images/JNE.png" alt="Logo" style="height: 40px; width: auto;">
                 </li>
                 <li>
-                    <img src="J&T.png" alt="Logo" style="height: 40px; width: auto;">
+                    <img src="images/J&T.png" alt="Logo" style="height: 40px; width: auto;">
                 </li>
                 <li>
-                    <img src="sicepat.png" alt="Logo" style="height: 40px; width: auto;">
+                    <img src="images/sicepat.png" alt="Logo" style="height: 40px; width: auto;">
                 </li>
                 <li>
-                    <img src="spx.png" alt="Logo" style="height: 40px; width: auto;">
+                    <img src="images/spx.png" alt="Logo" style="height: 40px; width: auto;">
                 </li>
             </ul>
         </div>

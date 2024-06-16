@@ -1,3 +1,12 @@
+<?php
+include 'connection.php'; // Sertakan file koneksi ke database
+
+// Query untuk mengambil data produk dari tabel
+$sql = "SELECT * FROM products";
+$stmt = $pdo->query($sql);
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +18,7 @@
     <title>Elleano Fashion Wears</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="elleano.png">
+    <link rel="icon" type="image/x-icon" href="images/elleano.png">
 
     <!-- Bootstrap icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -22,7 +31,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.php"><img src = "elleano.png" alt="Logo" style="height: 100px; width: auto;" ></a>
+            <a class="navbar-brand" href="index.php"><img src = "images/elleano.png" alt="Logo" style="height: 100px; width: auto;" ></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -53,7 +62,7 @@
                 </form>
                 <div class="d-flex">
                     <a href="login.php" class="d-flex align-items-center">
-                        <img src="avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
+                        <img src="images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
                     </a>
                 </div>
             </div>
@@ -74,60 +83,48 @@
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <?php
-                $products = [
-                    ["name" => "Fancy Product", "price" => "$40.00 - $80.00", "image" => "https://dummyimage.com/450x300/dee2e6/6c757d.jpg", "badge" => "",],
-                    ["name" => "Special Item", "price" => "$18.00", "old_price" => "$20.00", "image" => "https://dummyimage.com/450x300/dee2e6/6c757d.jpg", "badge" => "Sale", "rating" => 5],
-                    ["name" => "Sale Item", "price" => "$25.00", "old_price" => "$50.00", "image" => "https://dummyimage.com/450x300/dee2e6/6c757d.jpg", "badge" => "Sale"],
-                    ["name" => "Popular Item", "price" => "$40.00", "image" => "https://dummyimage.com/450x300/dee2e6/6c757d.jpg", "rating" => 5],
-                    ["name" => "Sale Item", "price" => "$25.00", "old_price" => "$50.00", "image" => "https://dummyimage.com/450x300/dee2e6/6c757d.jpg", "badge" => "Sale"],
-                    ["name" => "Fancy Product", "price" => "$120.00 - $280.00", "image" => "https://dummyimage.com/450x300/dee2e6/6c757d.jpg", "badge" => ""],
-                    ["name" => "Special Item", "price" => "$18.00", "old_price" => "$20.00", "image" => "https://dummyimage.com/450x300/dee2e6/6c757d.jpg", "badge" => "Sale", "rating" => 5],
-                    ["name" => "Popular Item", "price" => "$40.00", "image" => "https://dummyimage.com/450x300/dee2e6/6c757d.jpg", "rating" => 5],
-                ];
-
-                foreach ($products as $product) {
-                    echo '<div class="col mb-5">';
-                    echo '    <div class="card h-100">';
-                    
-                    if (!empty($product['badge'])) {
-                        echo '        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem;">' . $product['badge'] . '</div>';
-                    }
-                    
-                    echo '        <img class="card-img-top" src="' . $product['image'] . '" alt="...">';
-                    echo '        <div class="card-body p-4">';
-                    echo '            <div class="text-center">';
-                    echo '                <h5 class="fw-bolder">' . $product['name'] . '</h5>';
-                    
-                    if (!empty($product['rating'])) {
-                        echo '                <div class="d-flex justify-content-center small text-warning mb-2">';
-                        for ($i = 0; $i < $product['rating']; $i++) {
-                            echo '                    <div class="bi-star-fill"></div>';
-                        }
-                        echo '                </div>';
-                    }
-                    
-                    if (!empty($product['old_price'])) {
-                        echo '                <span class="text-muted text-decoration-line-through">' . $product['old_price'] . '</span>';
-                    }
-                    echo '                ' . $product['price'];
-                    
-                    echo '            </div>';
-                    echo '        </div>';
-                    echo '        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">';
-                    echo '            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">' . (isset($product['old_price']) ? 'Add to cart' : 'View options') . '</a></div>';
-                    echo '        </div>';
-                    echo '    </div>';
-                    echo '</div>';
-                }
-                ?>
+                <?php foreach ($products as $product): ?>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <?php if (!empty($product['badge'])): ?>
+                                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem;">
+                                    <?php echo $product['badge']; ?>
+                                </div>
+                            <?php endif; ?>
+                            <img class="card-img-top" src="images/<?php echo $product['product_image']; ?>" alt="...">
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder"><?php echo $product['product_name']; ?></h5>
+                                    <?php if (!empty($product['rating'])): ?>
+                                        <div class="d-flex justify-content-center small text-warning mb-2">
+                                            <?php for ($i = 0; $i < $product['rating']; $i++): ?>
+                                                <div class="bi-star-fill"></div>
+                                            <?php endfor; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($product['old_price'])): ?>
+                                        <span class="text-muted text-decoration-line-through"><?php echo $product['old_price']; ?></span>
+                                    <?php endif; ?>
+                                    <?php echo $product['price']; ?>
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <a class="btn btn-outline-dark mt-auto" href="#">
+                                        <?php echo isset($product['old_price']) ? 'Add to cart' : 'View options'; ?>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
 
     <section class="footer flex">
     <div class="footer-logo">
-        <img src="elleano.png" alt="Logo" style="height: 300px; width: auto;">
+        <img src="images/elleano.png" alt="Logo" style="height: 300px; width: auto;">
         <p class="fs-montserrat fs-200">
             Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.
         </p>
@@ -136,39 +133,39 @@
     <div class="social-icons">
         <div class="social-media">
             <h3>Our Social Media</h3>
-            <a href="https://www.tiktok.com/@elleano.id"><img src="tiktok.png" alt="Logo" style="height: 60px; width: auto;"></a>
-            <a href="https://www.instagram.com/elleano.id?igsh=MXByZXFuYjM5MWd4cQ=="><img src="instagram.png" alt="Logo" style="height: 60px; width: auto;"></a>
+            <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktok.png" alt="Logo" style="height: 60px; width: auto;"></a>
+            <a href="https://www.instagram.com/elleano.id?igsh=MXByZXFuYjM5MWd4cQ=="><img src="images/instagram.png" alt="Logo" style="height: 60px; width: auto;"></a>
         </div>
 
         <div class="footer-menu">
             <h3 class="fs-poppins fs-200 bold-800">Official Store</h3>
             <ul>
                 <li>
-                    <a href="https://shopee.co.id/elleano.id"><img src="shopee.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                    <a href="https://shopee.co.id/elleano.id"><img src="images/shopee.png" alt="Logo" style="height: 40px; width: auto;"></a>
                 </li>
                 <li>
-                    <a href="https://www.tokopedia.com/elleanowears"><img src="tokopedia.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                    <a href="https://www.tokopedia.com/elleanowears"><img src="images/tokopedia.png" alt="Logo" style="height: 40px; width: auto;"></a>
                 </li>
                 <li>
-                    <a href="https://www.tiktok.com/@elleano.id"><img src="tiktokshop.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                    <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktokshop.png" alt="Logo" style="height: 40px; width: auto;"></a>
                 </li>
                 <li>
-                    <a href="https://www.lazada.co.id/shop/elleano-id"><img src="lazada.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                    <a href="https://www.lazada.co.id/shop/elleano-id"><img src="images/lazada.png" alt="Logo" style="height: 40px; width: auto;"></a>
                 </li>
             </ul>
             <h3 class="fs-poppins fs-200 bold-800">Shipping Options</h3>
             <ul>
                 <li>
-                    <img src="JNE.png" alt="Logo" style="height: 40px; width: auto;">
+                    <img src="images/JNE.png" alt="Logo" style="height: 40px; width: auto;">
                 </li>
                 <li>
-                    <img src="J&T.png" alt="Logo" style="height: 40px; width: auto;">
+                    <img src="images/J&T.png" alt="Logo" style="height: 40px; width: auto;">
                 </li>
                 <li>
-                    <img src="sicepat.png" alt="Logo" style="height: 40px; width: auto;">
+                    <img src="images/sicepat.png" alt="Logo" style="height: 40px; width: auto;">
                 </li>
                 <li>
-                    <img src="spx.png" alt="Logo" style="height: 40px; width: auto;">
+                    <img src="images/spx.png" alt="Logo" style="height: 40px; width: auto;">
                 </li>
             </ul>
         </div>
