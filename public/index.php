@@ -79,48 +79,51 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </header>
 
-    <!-- Section -->
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <?php foreach ($products as $product): ?>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <?php if (!empty($product['badge'])): ?>
-                                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem;">
-                                    <?php echo $product['badge']; ?>
-                                </div>
-                            <?php endif; ?>
-                            <img class="card-img-top" src="images/<?php echo $product['product_image']; ?>" alt="...">
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <h5 class="fw-bolder"><?php echo $product['product_name']; ?></h5>
-                                    <?php if (!empty($product['rating'])): ?>
-                                        <div class="d-flex justify-content-center small text-warning mb-2">
-                                            <?php for ($i = 0; $i < $product['rating']; $i++): ?>
-                                                <div class="bi-star-fill"></div>
-                                            <?php endfor; ?>
-                                        </div>
-                                    <?php endif; ?>
-                                    <?php if (!empty($product['old_price'])): ?>
-                                        <span class="text-muted text-decoration-line-through"><?php echo $product['old_price']; ?></span>
-                                    <?php endif; ?>
-                                    <?php echo $product['price']; ?>
-                                </div>
+<!-- Section -->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <?php foreach ($products as $product): ?>
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <?php if (!empty($product['badge'])): ?>
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem;">
+                                <?php echo $product['badge']; ?>
                             </div>
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center">
-                                    <a class="btn btn-outline-dark mt-auto" href="#">
-                                        <?php echo isset($product['old_price']) ? 'Add to cart' : 'View options'; ?>
-                                    </a>
-                                </div>
+                        <?php endif; ?>
+                        <a href="product.php?id=<?php echo $product['id']; ?>">
+                            <img class="card-img-top" src="images/<?php echo $product['product_image']; ?>" alt="...">
+                        </a>
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder"><?php echo $product['product_name']; ?></h5>
+                                <?php if (!empty($product['rating'])): ?>
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <?php for ($i = 0; $i < $product['rating']; $i++): ?>
+                                            <div class="bi-star-fill"></div>
+                                        <?php endfor; ?>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (!empty($product['old_price'])): ?>
+                                    <span class="text-muted text-decoration-line-through"><?php echo $product['old_price']; ?></span>
+                                <?php endif; ?>
+                                <?php echo $product['price']; ?>
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" href="product.php?id=<?php echo $product['id']; ?>">
+                                    <?php echo isset($product['old_price']) ? 'Add to cart' : 'View options'; ?>
+                                </a>
                             </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            </div>
+                </div>
+            <?php endforeach; ?>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <section class="footer flex">
     <div class="footer-logo">

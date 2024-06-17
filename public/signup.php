@@ -1,46 +1,46 @@
 <?php
+session_start();
+
 // Database connection parameters
 $host = "localhost";
 $dbname = "loginacc";
 $user = "postgres";
 $password = "michang47";
 
-// Create a new database connection
+// Establish database connection
 $conn = pg_connect("host=$host dbname=$dbname user=$user password=$password");
 
-// Check connection
 if (!$conn) {
     die("Connection failed: " . pg_last_error());
 }
 
+$message = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Capture form data
     $name = $_POST['name'];
     $password = $_POST['password'];
-    $confirmPassword = $_POST['confirmPassword'];
+    $confirm_password = $_POST['confirm_password'];
 
-    // Validate data
-    if (empty($name) || empty($password) || empty($confirmPassword)) {
-        echo "All fields are required!";
-    } elseif ($password !== $confirmPassword) {
-        echo "Passwords do not match!";
+    if (empty($name) || empty($password) || empty($confirm_password)) {
+        $message = "All fields are required!";
+    } elseif ($password !== $confirm_password) {
+        $message = "Passwords do not match!";
     } else {
-        // Hash the password
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        // Hash password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Insert data into the database
+        // Insert user into database
         $query = "INSERT INTO users (name, password) VALUES ($1, $2)";
-        $result = pg_query_params($conn, $query, array($name, $hashedPassword));
+        $result = pg_query_params($conn, $query, array($name, $hashed_password));
 
         if ($result) {
-            echo "Registration successful!";
+            $message = "User registered successfully!";
         } else {
-            echo "Error: " . pg_last_error($conn);
+            $message = "Error: " . pg_last_error($conn);
         }
     }
 }
 
-// Close the database connection
 pg_close($conn);
 ?>
 
@@ -49,155 +49,84 @@ pg_close($conn);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Sign Up | Elleano Fashion Wears</title>
-
-    <!-- Favicon -->
+    <title>Signup | Elleano Fashion Wears</title>
     <link rel="icon" type="image/x-icon" href="images/elleano.png">
-
-    <!-- Core theme CSS (includes Bootstrap) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
     <link href="login.css" rel="stylesheet">
 </head>
 <body>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.php"><img src = "images/elleano.png" alt="Logo" style="height: 100px; width: auto;" ></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#!">About</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!">All Products</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                            <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <form class="d-flex me-3">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
-                </form>
-                <div class="d-flex">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="index.php"><img src="images/elleano.png" alt="Logo" style="height: 100px; width: auto;"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!">About</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">All Products</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="d-flex me-3">
+                <button class="btn btn-outline-dark" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                </button>
+            </form>
+            <div class="d-flex">
+                <?php if (isset($_SESSION['user_name'])) : ?>
+                    <a href="#" class="d-flex align-items-center">
+                        <img src="images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
+                    </a>
+                <?php else : ?>
                     <a href="login.php" class="d-flex align-items-center">
                         <img src="images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
                     </a>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
+<div class="main-content">
     <div class="login-container">
-        <form action="/signup.php" method="post" >
-        <h1>Sign Up</h1>
-            <input placeholder="Name" name="name" type="text"><br>
-            <input placeholder="Password" name="password" type="password"><br>
-            <input placeholder="Confirm Password" name="confirmPassword" type="password"><br>
-            <button type="submit" class="sub">Sign Up</button><br>
-            <a href="login.php">Go back to login page</a>
+        <form action="/signup.php" method="post">
+            <h1>Signup</h1>
+            <input placeholder="Name" name="name" type="text">
+            <br>
+            <input placeholder="Password" name="password" type="password">
+            <br>
+            <input placeholder="Confirm Password" name="confirm_password" type="password">
+            <br>
+            <button type="submit" class="sub">Sign Up</button>
+            <h6>Already have an account?</h6>
+            <a href="login.php">Login</a>
         </form>
+        <div class="message"><?php echo $message; ?></div>
     </div>
-    <section class="footer flex">
-    <div class="footer-logo">
-        <img src="images/elleano.png" alt="Logo" style="height: 100px; width: auto;">
-        <p class="fs-montserrat fs-200">
-            Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.
-        </p>
-    </div>
+</div>
 
-    <div class="social-icons">
-        <div class="social-media">
-            <h3>Our Social Media</h3>
-            <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktok.png" alt="Logo" style="height: 60px; width: auto;"></a>
-            <a href="https://www.instagram.com/elleano.id?igsh=MXByZXFuYjM5MWd4cQ=="><img src="images/instagram.png" alt="Logo" style="height: 60px; width: auto;"></a>
-        </div>
-
-        <div class="footer-menu">
-            <h3 class="fs-poppins fs-200 bold-800">Official Store</h3>
-            <ul>
-                <li>
-                    <a href="https://shopee.co.id/elleano.id"><img src="images/shopee.png" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-                <li>
-                    <a href="https://www.tokopedia.com/elleanowears"><img src="images/tokopedia.png" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-                <li>
-                    <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktokshop.png" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-                <li>
-                    <a href="https://www.lazada.co.id/shop/elleano-id"><img src="images/lazada.png" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-            </ul>
-            <h3 class="fs-poppins fs-200 bold-800">Shipping Options</h3>
-            <ul>
-                <li>
-                    <img src="images/JNE.png" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-                <li>
-                    <img src="images/J&T.png" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-                <li>
-                    <img src="images/sicepat.png" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-                <li>
-                    <img src="images/spx.png" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="contact">
-        <h3 class="fs-poppins fs-200 bold-800">Contact Us</h3>
-        <p class="fs-montserrat">
-            michael.535220261@stu.untar.ac.id <br>
-            firzi.535220260@stu.untar.ac.id <br>
-            rafael.535220086@stu.untar.ac.id <br>
-            +6285217788878 <br>
-            Universitas Tarumanagara
-        </p>
-    </div>
-
-    <form action="/" method="POST" class="emails">
-        <h3 class="fs-poppins fs-200 bold-800">Subscribe To Our Email</h3>
-        <p class="updates fs-poppins fs-300 bold-800">
-            For Latest News & Updates
-        </p>
-        <div class="inputField flex bg-gray">
-            <input type="email" name="email" placeholder="Enter Your Email" class="fs-montserrat bg-gray"/>
-        </div>
-        <button class="bg-black text-white fs-poppins fs-50">Subscribe</button>
-    </form>
-</section>
-
-<!-- Footer -->
 <footer class="py-5 bg-dark">
     <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Elleano.id 2024</p>
     </div>
 </footer>
 
-
-    <!-- Bootstrap core JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core theme JS -->
-    <script src="js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/scripts.js"></script>
 </body>
 </html>

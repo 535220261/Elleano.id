@@ -1,3 +1,24 @@
+<?php
+include 'connection.php';
+
+// Tangkap ID produk dari URL
+$product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+// Query untuk mengambil data produk berdasarkan ID
+$query = "SELECT * FROM products WHERE id = :id";
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':id', $product_id, PDO::PARAM_INT);
+$stmt->execute();
+
+// Jika produk ditemukan
+if ($stmt->rowCount() > 0) {
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+} else {
+    // Jika produk tidak ditemukan, alihkan ke halaman lain atau tampilkan pesan error
+    die("Produk tidak ditemukan.");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +27,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>(product name) - Elleano.id</title>
+    <title><?php echo $product['product_name']; ?> - Elleano.id</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/elleano.png">
@@ -16,13 +37,23 @@
 
     <!-- Core theme CSS (includes Bootstrap) -->
     <link href="styles.css" rel="stylesheet">
+
+    <!-- Custom CSS for Show More/Less -->
+    <style>
+        .description-short {
+            display: inline;
+        }
+        .description-full {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.php"><img src = "images/elleano.png" alt="Logo" style="height: 100px; width: auto;" ></a>
+            <a class="navbar-brand" href="index.php"><img src="images/elleano.png" alt="Logo" style="height: 100px; width: auto;"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -65,17 +96,20 @@
         <div class="container px-4 px-lg-5 my-5">
             <div class="row gx-4 gx-lg-5 align-items-center">
                 <div class="col-md-6">
-                    <img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="...">
+                    <img class="card-img-top mb-5 mb-md-0" src="images/<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>">
                 </div>
                 <div class="col-md-6">
-                    <small class="mb-1">SKU: BST-498</small>
-                    <h1 class="display-5 fw-bolder">Shop item template</h1>
-                    <p class="fs-5 mb-5">
-                        <span class="text-decoration-line-through">$45.00</span>
-                        <span>$40.00</span>
+                    <h1 class="display-5 fw-bolder"><?php echo $product['product_name']; ?></h1>
+                    <p class="display-5 fw-bolder">
+                        <?php if (!empty($product['old_price'])): ?>
+                            <span class="text-decoration-line-through"><?php echo $product['old_price']; ?></span>
+                        <?php endif; ?>
+                        <span>Rp <?php echo $product['price']; ?></span>
                     </p>
                     <p class="lead">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero?
+                        <span class="description-short"><?php echo substr($product['description'], 0, 100); ?>...</span>
+                        <span class="description-full"><?php echo $product['description']; ?></span>
+                        <button class="btn btn-link p-0" id="showMoreBtn">Lihat Selengkapnya</button>
                     </p>
                     <div class="d-flex">
                         <input id="inputQuantity" class="form-control text-center me-3" type="num" value="1" style="max-width: 3rem">
@@ -94,94 +128,31 @@
         <div class="container px-4 px-lg-5 mt-5">
             <h2 class="fw-bolder mb-4">Related products</h2>
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero?</p>
-                <!-- Your related items cards here -->
+                <!-- Here you can add code to display related products if needed -->
             </div>
         </div>
     </section>
 
-    <section class="footer flex">
-    <div class="footer-logo">
-        <img src="images/elleano.png" alt="Logo" style="height: 300px; width: auto;">
-        <p class="fs-montserrat fs-200">
-            Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.
-        </p>
-    </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
 
-    <div class="social-icons">
-        <div class="social-media">
-            <h3>Our Social Media</h3>
-            <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktok.png" alt="Logo" style="height: 60px; width: auto;"></a>
-            <a href="https://www.instagram.com/elleano.id?igsh=MXByZXFuYjM5MWd4cQ=="><img src="images/instagram.png" alt="Logo" style="height: 60px; width: auto;"></a>
-        </div>
-
-        <div class="footer-menu">
-            <h3 class="fs-poppins fs-200 bold-800">Official Store</h3>
-            <ul>
-                <li>
-                    <a href="https://shopee.co.id/elleano.id"><img src="images/shopee.png" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-                <li>
-                    <a href="https://www.tokopedia.com/elleanowears"><img src="images/tokopedia.png" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-                <li>
-                    <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktokshop.png" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-                <li>
-                    <a href="https://www.lazada.co.id/shop/elleano-id"><img src="images/lazada.png" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-            </ul>
-            <h3 class="fs-poppins fs-200 bold-800">Shipping Options</h3>
-            <ul>
-                <li>
-                    <img src="images/JNE.png" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-                <li>
-                    <img src="images/J&T.png" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-                <li>
-                    <img src="images/sicepat.png" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-                <li>
-                    <img src="images/spx.png" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="contact">
-        <h3 class="fs-poppins fs-200 bold-800">Contact Us</h3>
-        <p class="fs-montserrat">
-            michael.535220261@stu.untar.ac.id <br>
-            firzi.535220260@stu.untar.ac.id <br>
-            rafael.535220086@stu.untar.ac.id <br>
-            +6285217788878 <br>
-            Universitas Tarumanagara
-        </p>
-    </div>
-
-    <form action="/" method="POST" class="emails">
-        <h3 class="fs-poppins fs-200 bold-800">Subscribe To Our Email</h3>
-        <p class="updates fs-poppins fs-300 bold-800">
-            For Latest News & Updates
-        </p>
-        <div class="inputField flex bg-gray">
-            <input type="email" name="email" placeholder="Enter Your Email" class="fs-montserrat bg-gray"/>
-        </div>
-        <button class="bg-black text-white fs-poppins fs-50">Subscribe</button>
-    </form>
-</section>
-
-<!-- Footer -->
-<footer class="py-5 bg-dark">
-    <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Elleano.id 2024</p>
-    </div>
-</footer>
-
-
-    <!-- Bootstrap core JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core theme JS -->
-    <script src="js/scripts.js"></script>
+    <!-- Custom JavaScript for Show More/Less -->
+    <script>
+        document.getElementById('showMoreBtn').addEventListener('click', function() {
+            var shortDesc = document.querySelector('.description-short');
+            var fullDesc = document.querySelector('.description-full');
+            if (fullDesc.style.display === 'none') {
+                fullDesc.style.display = 'inline';
+                shortDesc.style.display = 'none';
+                this.innerText = 'Lihat Lebih Sedikit';
+            } else {
+                fullDesc.style.display = 'none';
+                shortDesc.style.display = 'inline';
+                this.innerText = 'Lihat Selengkapnya';
+            }
+        });
+    </script>
+</body>
+</html>
