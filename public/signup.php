@@ -56,6 +56,8 @@ pg_close($conn);
     <link href="login.css" rel="stylesheet">
 </head>
 <body>
+
+<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
         <a class="navbar-brand" href="index.php"><img src="images/elleano.png" alt="Logo" style="height: 100px; width: auto;"></a>
@@ -68,15 +70,15 @@ pg_close($conn);
                     <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#!">About</a>
+                    <a class="nav-link" href="about.php">About</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">All Products</a></li>
+                        <li><a class="dropdown-item" href="all-product.php">All Products</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                        <li><a class="dropdown-item" href="popular-items.php">Popular Items</a></li>
+                        <li><a class="dropdown-item" href="new-arrival.php">New Arrivals</a></li>
                     </ul>
                 </li>
             </ul>
@@ -88,11 +90,12 @@ pg_close($conn);
                 </button>
             </form>
             <div class="d-flex">
-                <?php if (isset($_SESSION['user_name'])) : ?>
-                    <a href="#" class="d-flex align-items-center">
-                        <img src="images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
-                    </a>
-                <?php else : ?>
+                <?php if (isset($_SESSION['user_name'])): ?>
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">Welcome, <?php echo $_SESSION['user_name']; ?></span>
+                        <a href="logout.php" class="btn btn-outline-dark">Logout</a>
+                    </div>
+                <?php else: ?>
                     <a href="login.php" class="d-flex align-items-center">
                         <img src="images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
                     </a>

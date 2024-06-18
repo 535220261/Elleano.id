@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'connection.php';
 
 // Query untuk mengambil data produk
@@ -18,6 +19,9 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/admin.png">
+
+    <link rel="icon" type="image/x-icon" href="images/admin.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Bootstrap icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -67,6 +71,105 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </nav>
 
+    <head>
+
+</head>
+
+<head>
+    <style>
+        /* Style untuk form create product */
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        form input[type="text"],
+        form textarea,
+        form input[type="file"] {
+            width: calc(100% - 22px); /* adjust for padding */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        form input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        /* Style untuk section daftar produk */
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .short-description {
+            max-height: 50px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .see-more {
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .full-description {
+            display: none;
+        }
+    </style>
+</head>
+
+
 <form action="process_create.php" method="post" enctype="multipart/form-data">
     <label for="photos">Unggah Foto (Maksimal 8):</label><br>
     <input type="file" name="product_image[]" multiple><br> <!-- Perhatikan penggunaan name="product_image[]" -->
@@ -78,12 +181,46 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <button type="submit">Simpan</button>
 </form>
 
-
     <hr>
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .short-description {
+            max-height: 50px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .see-more {
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .full-description {
+            display: none;
+        }
+    </style>
 
     <h1>Daftar Produk</h1>
 
-<table border="1">
+    <table border="1">
     <thead>
         <tr>
             <th>ID</th>
@@ -101,7 +238,15 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <tr>
             <td><?php echo $product['id']; ?></td>
             <td><?php echo $product['product_name']; ?></td>
-            <td><?php echo $product['description']; ?></td>
+            <td>
+                <div id="short-<?php echo $product['id']; ?>" class="short-description">
+                    <?php echo substr($product['description'], 0, 50); ?>...
+                </div>
+                <div id="full-<?php echo $product['id']; ?>" class="full-description">
+                    <?php echo $product['description']; ?>
+                </div>
+                <span id="see-more-<?php echo $product['id']; ?>" class="see-more" onclick="toggleDescription(<?php echo $product['id']; ?>)">lihat selengkapnya</span>
+            </td>
             <td><?php echo $product['price']; ?></td>
             <td><?php echo $product['is_new'] ? 'Ya' : 'Tidak'; ?></td>
             <td><?php echo $product['is_popular'] ? 'Ya' : 'Tidak'; ?></td>
@@ -121,6 +266,24 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </tbody>
 </table>
 
+
+<script>
+    function toggleDescription(id) {
+        var shortDescription = document.getElementById('short-' + id);
+        var fullDescription = document.getElementById('full-' + id);
+        var seeMore = document.getElementById('see-more-' + id);
+
+        if (shortDescription.style.display === 'none') {
+            shortDescription.style.display = 'block';
+            fullDescription.style.display = 'none';
+            seeMore.innerText = 'lihat selengkapnya';
+        } else {
+            shortDescription.style.display = 'none';
+            fullDescription.style.display = 'block';
+            seeMore.innerText = 'lihat lebih sedikit';
+        }
+    }
+</script>
 
 </body>
 </html>

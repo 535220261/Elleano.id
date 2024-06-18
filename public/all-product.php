@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'connection.php'; // Sertakan file koneksi ke database
 
 // Query untuk mengambil data produk dari tabel
@@ -28,46 +29,54 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.php"><img src = "images/elleano.png" alt="Logo" style="height: 100px; width: auto;" ></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.php">About</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="all-product.php">All Products</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="popular-items.php">Popular Items</a></li>
-                            <li><a class="dropdown-item" href="new-arrival.php">New Arrivals</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <form class="d-flex me-3">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
-                </form>
-                <div class="d-flex">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="index.php"><img src="images/elleano.png" alt="Logo" style="height: 100px; width: auto;"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.php">About</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="all-product.php">All Products</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="popular-items.php">Popular Items</a></li>
+                        <li><a class="dropdown-item" href="new-arrival.php">New Arrivals</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="d-flex me-3">
+                <button class="btn btn-outline-dark" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                </button>
+            </form>
+            <div class="d-flex">
+                <?php if (isset($_SESSION['user_name'])): ?>
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">Welcome, <?php echo $_SESSION['user_name']; ?></span>
+                        <a href="logout.php" class="btn btn-outline-dark">Logout</a>
+                    </div>
+                <?php else: ?>
                     <a href="login.php" class="d-flex align-items-center">
                         <img src="images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
                     </a>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Header -->
     <header class="bg-dark py-5">
