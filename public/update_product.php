@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'connection.php';
 
 // Ambil ID produk yang akan diupdate dari parameter URL
@@ -76,7 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Eksekusi statement
     if ($stmt->execute()) {
-        echo "Data produk berhasil diupdate.";
+        echo "<script>alert('Data produk berhasil diupdate.'); window.location.href='admin.php';</script>";
+        exit;
     } else {
         echo "Gagal mengupdate data produk.";
     }
@@ -91,10 +93,101 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Update Produk</title>
 </head>
 <body>
+<style>
+        /* Style untuk form create product */
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        form input[type="text"],
+        form textarea,
+        form input[type="file"] {
+            width: calc(100% - 22px); /* adjust for padding */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        form input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        /* Style untuk section daftar produk */
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .short-description {
+            max-height: 50px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .see-more {
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .full-description {
+            display: none;
+        }
+    </style>
     <h1>Update Produk</h1>
 
     <form action="update_product.php?id=<?php echo $id; ?>" method="post" enctype="multipart/form-data">
-    <?php if ($product['product_image']): ?>
+        <?php if ($product['product_image']): ?>
             <img src="images/<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>" width="100"><br>
         <?php endif; ?>
         <input type="file" name="product_image"><br>
@@ -103,8 +196,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="price" placeholder="Harga" value="<?php echo $product['price']; ?>"><br>
         <label><input type="checkbox" name="is_new" value="1" <?php echo $product['is_new'] ? 'checked' : ''; ?>> Produk Baru</label><br>
         <label><input type="checkbox" name="is_popular" value="1" <?php echo $product['is_popular'] ? 'checked' : ''; ?>> Produk Populer</label><br>
-        <label for="product_image">Gambar Produk:</label><br>
-        
         <button type="submit">Simpan Perubahan</button>
     </form>
 

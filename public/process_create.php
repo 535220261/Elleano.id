@@ -43,7 +43,7 @@ try {
     }
 
     if ($uploadError) {
-        echo "Gagal mengunggah file.";
+        echo "<script>alert('Gagal mengunggah file.');</script>";
     } else {
         // SQL statement untuk INSERT data ke tabel products
         $sql = "INSERT INTO products (product_name, description, price, is_new, is_popular, product_image) 
@@ -65,11 +65,11 @@ try {
             $stmt->execute();
         }
 
-        echo "Data produk berhasil ditambahkan.";
+        echo "<script>alert('Data produk berhasil ditambahkan.'); window.location='admin.php';</script>";
     }
 } catch(PDOException $e) {
-    echo "Error: " . $e->getMessage();
+    echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
 } catch(Exception $e) {
-    echo "Error: " . $e->getMessage();
+    echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
 }
 ?>

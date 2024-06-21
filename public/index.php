@@ -4,9 +4,9 @@ session_start();
 // Sertakan file koneksi ke database
 include 'connection.php';
 
-// Query untuk mengambil data produk dari tabel
-$sql = "SELECT * FROM products";
-$stmt = $pdo->query($sql);
+// Ambil 12 produk pertama dari database
+$stmt = $pdo->prepare("SELECT * FROM products LIMIT 12");
+$stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -56,11 +56,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </li>
             </ul>
-            <form class="d-flex me-3">
+            <form class="d-flex me-3" action="cart.php" method="get">
                 <button class="btn btn-outline-dark" type="submit">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    <span class="badge bg-dark text-white ms-1 rounded-pill">
+                        <?php echo isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0; ?>
+                    </span>
                 </button>
             </form>
             <div class="d-flex">
@@ -92,7 +94,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- Section -->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-2 row-cols-lg-4 justify-content-center">
             <?php foreach ($products as $product): ?>
                 <div class="col mb-5">
                     <div class="card h-100">
@@ -102,7 +104,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         <?php endif; ?>
                         <a href="product.php?id=<?php echo $product['id']; ?>">
-                            <img class="card-img-top" src="images/<?php echo $product['product_image']; ?>" alt="...">
+                            <img class="card-img-top img-fluid" src="images/<?php echo $product['product_image']; ?>" alt="...">
                         </a>
                         <div class="card-body p-4">
                             <div class="text-center">
@@ -115,25 +117,40 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </div>
                                 <?php endif; ?>
                                 <?php if (!empty($product['old_price'])): ?>
-                                    <span class="text-muted text-decoration-line-through"><?php echo $product['old_price']; ?></span>
+                                    <span class="text-muted text-decoration-line-through">Rp <?php echo $product['old_price']; ?></span>
                                 <?php endif; ?>
-                                <?php echo $product['price']; ?>
+                                <span>Rp <?php echo $product['price']; ?></span>
                             </div>
                         </div>
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                             <div class="text-center">
-                                <a class="btn btn-outline-dark mt-auto" href="product.php?id=<?php echo $product['id']; ?>">
-                                    <?php echo isset($product['old_price']) ? 'Add to cart' : 'View options'; ?>
-                                </a>
+                                <a class="btn btn-outline-dark mt-auto" href="product.php?id=<?php echo $product['id']; ?>">View options</a>
+                                <a class="btn btn-outline-dark mt-auto ms-2" href="#" onclick="addToCart(<?php echo $product['id']; ?>)">Add to cart</a>
                             </div>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
+        <!-- Tombol "Show More" -->
+        <div class="text-center mt-4">
+            <a href="all-product.php" class="btn btn-primary">Show More</a>
+        </div>
     </div>
 </section>
 
+<script>
+function addToCart(productId) {
+    <?php if (isset($_SESSION['user_id'])): ?>
+        // Jika user sudah login
+        window.location.href = 'cart.php?id=' + productId;
+    <?php else: ?>
+        // Jika user belum login
+        alert('Anda harus login terlebih dahulu!');
+        window.location.href = 'login.php';
+    <?php endif; ?>
+}
+</script>
 
     <section class="footer flex">
     <div class="footer-logo">

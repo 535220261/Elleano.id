@@ -100,14 +100,15 @@ if ($stmt->rowCount() > 0) {
     </div>
 </nav>
 
-    <!-- Product section -->
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="row gx-4 gx-lg-5 align-items-center">
-                <div class="col-md-6">
-                    <img class="card-img-top mb-5 mb-md-0" src="images/<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>">
-                </div>
-                <div class="col-md-6">
+<!-- Product section -->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-start">
+            <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0" src="images/<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>">
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex flex-column">
                     <h1 class="display-5 fw-bolder"><?php echo $product['product_name']; ?></h1>
                     <p class="display-5 fw-bolder">
                         <?php if (!empty($product['old_price'])): ?>
@@ -116,13 +117,13 @@ if ($stmt->rowCount() > 0) {
                         <span>Rp <?php echo $product['price']; ?></span>
                     </p>
                     <p class="lead">
-                        <span class="description-short"><?php echo substr($product['description'], 0, 100); ?>...</span>
-                        <span class="description-full"><?php echo $product['description']; ?></span>
+                        <span class="description-short"><?php echo nl2br(htmlspecialchars(substr($product['description'], 0, 100))); ?>...</span>
+                        <span class="description-full" style="display: none;"><?php echo nl2br(htmlspecialchars($product['description'])); ?></span>
                         <button class="btn btn-link p-0" id="showMoreBtn">Lihat Selengkapnya</button>
                     </p>
                     <div class="d-flex">
-                        <input id="inputQuantity" class="form-control text-center me-3" type="num" value="1" style="max-width: 3rem">
-                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                        <input id="inputQuantity" class="form-control text-center me-3" type="number" value="1" min="1" style="max-width: 3rem">
+                        <button id="addToCartBtn" class="btn btn-outline-dark flex-shrink-0" type="button">
                             <i class="bi-cart-fill me-1"></i>
                             Add to cart
                         </button>
@@ -130,7 +131,9 @@ if ($stmt->rowCount() > 0) {
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- Related items section -->
     <section class="py-5 bg-light">
@@ -149,19 +152,25 @@ if ($stmt->rowCount() > 0) {
 
     <!-- Custom JavaScript for Show More/Less -->
     <script>
-        document.getElementById('showMoreBtn').addEventListener('click', function() {
-            var shortDesc = document.querySelector('.description-short');
-            var fullDesc = document.querySelector('.description-full');
-            if (fullDesc.style.display === 'none') {
-                fullDesc.style.display = 'inline';
-                shortDesc.style.display = 'none';
-                this.innerText = 'Lihat Lebih Sedikit';
-            } else {
-                fullDesc.style.display = 'none';
-                shortDesc.style.display = 'inline';
-                this.innerText = 'Lihat Selengkapnya';
-            }
-        });
-    </script>
+document.getElementById('showMoreBtn').addEventListener('click', function() {
+    var shortDesc = document.querySelector('.description-short');
+    var fullDesc = document.querySelector('.description-full');
+    if (fullDesc.style.display === 'none') {
+        fullDesc.style.display = 'inline';
+        shortDesc.style.display = 'none';
+        this.textContent = 'Lihat Lebih Sedikit';
+    } else {
+        fullDesc.style.display = 'none';
+        shortDesc.style.display = 'inline';
+        this.textContent = 'Lihat Selengkapnya';
+    }
+});
+
+document.getElementById('addToCartBtn').addEventListener('click', function() {
+    var quantity = document.getElementById('inputQuantity').value;
+    var productId = <?php echo $product['id']; ?>;
+    window.location.href = 'cart.php?id=' + productId + '&quantity=' + quantity;
+});
+</script>
 </body>
 </html>
