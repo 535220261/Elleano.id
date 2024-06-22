@@ -138,9 +138,22 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </section>
 
+<script>
+function addToCart(productId) {
+    <?php if (isset($_SESSION['user_id'])): ?>
+        // Jika user sudah login
+        window.location.href = 'cart.php?id=' + productId;
+    <?php else: ?>
+        // Jika user belum login
+        alert('Anda harus login terlebih dahulu!');
+        window.location.href = 'login.php';
+    <?php endif; ?>
+}
+</script>
+
     <section class="footer flex">
     <div class="footer-logo">
-        <img src="images/elleano.png" alt="Logo" style="height: 300px; width: auto;">
+        <img src="images/elleano.png" alt="Logo" style="height: 200px; width: auto;">
         <p class="fs-montserrat fs-200">
             Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.
         </p>

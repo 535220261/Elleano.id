@@ -68,8 +68,8 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="d-flex">
                 <?php if (isset($_SESSION['user_name'])): ?>
                     <div class="d-flex align-items-center">
-                        <span class="me-2">Welcome, <?php echo $_SESSION['user_name']; ?></span>
-                        <a href="logout.php" class="btn btn-outline-dark">Logout</a>
+                    <a href="account.php" class="me-2">Welcome, <?php echo $_SESSION['user_name']; ?></a>
+                    <a href="logout.php" class="btn btn-outline-dark">Logout</a>
                     </div>
                 <?php else: ?>
                     <a href="login.php" class="d-flex align-items-center">
@@ -154,7 +154,7 @@ function addToCart(productId) {
 
     <section class="footer flex">
     <div class="footer-logo">
-        <img src="images/elleano.png" alt="Logo" style="height: 300px; width: auto;">
+        <img src="images/elleano.png" alt="Logo" style="height: 200px; width: auto;">
         <p class="fs-montserrat fs-200">
             Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.
         </p>
@@ -231,7 +231,7 @@ function addToCart(productId) {
     </div>
 </footer>
 
-
+    
     <!-- Bootstrap core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 

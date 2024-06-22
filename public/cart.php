@@ -199,5 +199,91 @@ if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
         </div>
     </form>
 </div>
+
+<section class="footer flex">
+    <div class="footer-logo">
+        <img src="images/elleano.png" alt="Logo" style="height: 200px; width: auto;">
+        <p class="fs-montserrat fs-200">
+            Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.
+        </p>
+    </div>
+
+    <div class="social-icons">
+        <div class="social-media">
+            <h3>Our Social Media</h3>
+            <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktok.png" alt="Logo" style="height: 60px; width: auto;"></a>
+            <a href="https://www.instagram.com/elleano.id?igsh=MXByZXFuYjM5MWd4cQ=="><img src="images/instagram.png" alt="Logo" style="height: 60px; width: auto;"></a>
+        </div>
+
+        <div class="footer-menu">
+            <h3 class="fs-poppins fs-200 bold-800">Official Store</h3>
+            <ul>
+                <li>
+                    <a href="https://shopee.co.id/elleano.id"><img src="images/shopee.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                </li>
+                <li>
+                    <a href="https://www.tokopedia.com/elleanowears"><img src="images/tokopedia.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                </li>
+                <li>
+                    <a href="https://www.tiktok.com/@elleano.id"><img src="images/tiktokshop.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                </li>
+                <li>
+                    <a href="https://www.lazada.co.id/shop/elleano-id"><img src="images/lazada.png" alt="Logo" style="height: 40px; width: auto;"></a>
+                </li>
+            </ul>
+            <h3 class="fs-poppins fs-200 bold-800">Shipping Options</h3>
+            <ul>
+                <li>
+                    <img src="images/JNE.png" alt="Logo" style="height: 40px; width: auto;">
+                </li>
+                <li>
+                    <img src="images/J&T.png" alt="Logo" style="height: 40px; width: auto;">
+                </li>
+                <li>
+                    <img src="images/sicepat.png" alt="Logo" style="height: 40px; width: auto;">
+                </li>
+                <li>
+                    <img src="images/spx.png" alt="Logo" style="height: 40px; width: auto;">
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="contact">
+        <h3 class="fs-poppins fs-200 bold-800">Contact Us</h3>
+        <p class="fs-montserrat">
+            michael.535220261@stu.untar.ac.id <br>
+            firzi.535220260@stu.untar.ac.id <br>
+            rafael.535220086@stu.untar.ac.id <br>
+            +6285217788878 <br>
+            Universitas Tarumanagara
+        </p>
+    </div>
+
+    <form action="/" method="POST" class="emails">
+        <h3 class="fs-poppins fs-200 bold-800">Subscribe To Our Email</h3>
+        <p class="updates fs-poppins fs-300 bold-800">
+            For Latest News & Updates
+        </p>
+        <div class="inputField flex bg-gray">
+            <input type="email" name="email" placeholder="Enter Your Email" class="fs-montserrat bg-gray"/>
+        </div>
+        <button class="bg-black text-white fs-poppins fs-50">Subscribe</button>
+    </form>
+</section>
+
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Elleano.id 2024</p>
+    </div>
+</footer>
+
+
+    <!-- Bootstrap core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core theme JS -->
+    <script src="js/scripts.js"></script>
 </body>
 </html>

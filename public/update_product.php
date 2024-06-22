@@ -2,6 +2,12 @@
 session_start();
 include 'connection.php';
 
+// Periksa apakah pengguna sudah login sebagai admin
+if (!isset($_SESSION['user_name']) || $_SESSION['user_name'] !== 'admin') {
+    header('Location: login.php');
+    exit();
+}
+
 // Ambil ID produk yang akan diupdate dari parameter URL
 $id = isset($_GET['id']) ? $_GET['id'] : die('ID produk tidak ditemukan.');
 
@@ -56,30 +62,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Query untuk melakukan update produk
     $updateSql = "UPDATE products SET 
-                  product_name = :product_name, 
-                  description = :description, 
-                  price = :price, 
-                  is_new = :is_new, 
-                  is_popular = :is_popular,
-                  product_image = :product_image 
-                  WHERE id = :id";
+              product_name = :product_name, 
+              description = :description, 
+              price = :price, 
+              is_new = :is_new, 
+              is_popular = :is_popular,
+              product_image = :product_image 
+              WHERE id = :id";
 
-    $stmt = $pdo->prepare($updateSql);
-
-    // Bind parameter ke statement SQL
-    $stmt->bindParam(':product_name', $product_name);
-    $stmt->bindParam(':description', $description);
-    $stmt->bindParam(':price', $price);
-    $stmt->bindParam(':is_new', $is_new);
-    $stmt->bindParam(':is_popular', $is_popular);
-    $stmt->bindParam(':product_image', $product_image);
-    $stmt->bindParam(':id', $id);
+$stmt = $pdo->prepare($updateSql);
+$stmt->bindParam(':product_name', $product_name);
+$stmt->bindParam(':description', $description);
+$stmt->bindParam(':price', $price);
+$stmt->bindParam(':is_new', $is_new);
+$stmt->bindParam(':is_popular', $is_popular);
+$stmt->bindParam(':product_image', $product_image);
+$stmt->bindParam(':id', $id);
 
     // Eksekusi statement
     if ($stmt->execute()) {
         echo "<script>alert('Data produk berhasil diupdate.'); window.location.href='admin.php';</script>";
         exit;
-    } else {
+    }
+    else {
         echo "Gagal mengupdate data produk.";
     }
 }

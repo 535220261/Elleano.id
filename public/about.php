@@ -96,7 +96,7 @@ session_start();
 
     <section class="footer flex">
     <div class="footer-logo">
-        <img src="images/elleano.png" alt="Logo" style="height: 300px; width: auto;">
+        <img src="images/elleano.png" alt="Logo" style="height: 200px; width: auto;">
         <p class="fs-montserrat fs-200">
             Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.
         </p>

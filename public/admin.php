@@ -30,50 +30,56 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="index.php"><img src = "images/elleano.png" alt="Logo" style="height: 100px; width: auto;" ></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.php">About</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="all-product.php">All Products</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="popular-items.php">Popular Items</a></li>
-                            <li><a class="dropdown-item" href="new-arrival.php">New Arrivals</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <form class="d-flex me-3">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
-                </form>
-                <div class="d-flex">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="index.php"><img src="images/elleano.png" alt="Logo" style="height: 100px; width: auto;"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.php">About</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="all-product.php">All Products</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="popular-items.php">Popular Items</a></li>
+                        <li><a class="dropdown-item" href="new-arrival.php">New Arrivals</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="d-flex me-3" action="cart.php" method="get">
+                <button class="btn btn-outline-dark" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill">
+                        <?php echo isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0; ?>
+                    </span>
+                </button>
+            </form>
+            <div class="d-flex">
+                <?php if (isset($_SESSION['user_name'])): ?>
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">Welcome, <?php echo $_SESSION['user_name']; ?></span>
+                        <a href="logout.php" class="btn btn-outline-dark">Logout</a>
+                    </div>
+                <?php else: ?>
                     <a href="login.php" class="d-flex align-items-center">
                         <img src="images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
                     </a>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
-    </nav>
-
-    <head>
-
-</head>
+    </div>
+</nav>
 
 <head>
     <style>
@@ -184,88 +190,91 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <hr>
 
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        
-        th {
-            background-color: #f2f2f2;
-        }
-        
-        .short-description {
-            max-height: 50px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #f2f2f2;
+    }
+    
+    .short-description, .full-description {
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
 
-        .see-more {
-            color: blue;
-            cursor: pointer;
-            text-decoration: underline;
-        }
+    .short-description {
+        max-height: 50px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-        .full-description {
-            display: none;
-        }
-    </style>
+    .see-more {
+        color: blue;
+        cursor: pointer;
+        text-decoration: underline;
+    }
 
-    <h1>Daftar Produk</h1>
+    .full-description {
+        display: none;
+    }
+</style>
 
-    <table border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nama Produk</th>
-            <th>Deskripsi</th>
-            <th>Harga</th>
-            <th>Produk Baru</th>
-            <th>Produk Populer</th>
-            <th>Gambar</th>
-            <th>Action</th> <!-- Kolom untuk action -->
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($products as $product): ?>
-        <tr>
-            <td><?php echo $product['id']; ?></td>
-            <td><?php echo $product['product_name']; ?></td>
-            <td>
-                <div id="short-<?php echo $product['id']; ?>" class="short-description">
-                    <?php echo substr($product['description'], 0, 50); ?>...
-                </div>
-                <div id="full-<?php echo $product['id']; ?>" class="full-description">
-                    <?php echo $product['description']; ?>
-                </div>
-                <span id="see-more-<?php echo $product['id']; ?>" class="see-more" onclick="toggleDescription(<?php echo $product['id']; ?>)">lihat selengkapnya</span>
-            </td>
-            <td><?php echo $product['price']; ?></td>
-            <td><?php echo $product['is_new'] ? 'Ya' : 'Tidak'; ?></td>
-            <td><?php echo $product['is_popular'] ? 'Ya' : 'Tidak'; ?></td>
-            <td>
-                <?php if ($product['product_image']): ?>
-                    <img src="images/<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>" width="100">
-                <?php else: ?>
-                    No Image
-                <?php endif; ?>
-            </td>
-            <td>
-                <a href="update_product.php?id=<?php echo $product['id']; ?>">Update</a> |
-                <a href="delete_product.php?id=<?php echo $product['id']; ?>" onclick="return confirm('Anda yakin ingin menghapus produk ini?')">Delete</a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
+<h1>Daftar Produk</h1>
+
+<table border="1">
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>Nama Produk</th>
+        <th>Deskripsi</th>
+        <th>Harga</th>
+        <th>Produk Baru</th>
+        <th>Produk Populer</th>
+        <th>Gambar</th>
+        <th>Action</th> <!-- Kolom untuk action -->
+    </tr>
+</thead>
+<tbody>
+    <?php foreach ($products as $product): ?>
+    <tr>
+        <td><?php echo $product['id']; ?></td>
+        <td><?php echo $product['product_name']; ?></td>
+        <td>
+            <div id="short-<?php echo $product['id']; ?>" class="short-description">
+                <?php echo nl2br(htmlspecialchars(substr($product['description'], 0, 50))); ?>...
+            </div>
+            <div id="full-<?php echo $product['id']; ?>" class="full-description">
+                <?php echo nl2br(htmlspecialchars($product['description'])); ?>
+            </div>
+            <span id="see-more-<?php echo $product['id']; ?>" class="see-more" onclick="toggleDescription(<?php echo $product['id']; ?>)">lihat selengkapnya</span>
+        </td>
+        <td>Rp <?php echo number_format($product['price'], 0, ',', '.'); ?></td>
+        <td><?php echo $product['is_new'] ? 'Ya' : 'Tidak'; ?></td>
+        <td><?php echo $product['is_popular'] ? 'Ya' : 'Tidak'; ?></td>
+        <td>
+            <?php if ($product['product_image']): ?>
+                <img src="images/<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>" width="100">
+            <?php else: ?>
+                No Image
+            <?php endif; ?>
+        </td>
+        <td>
+            <a href="update_product.php?id=<?php echo $product['id']; ?>">Update</a> |
+            <a href="delete_product.php?id=<?php echo $product['id']; ?>" onclick="return confirm('Anda yakin ingin menghapus produk ini?')">Delete</a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</tbody>
 </table>
-
 
 <script>
     function toggleDescription(id) {
@@ -284,6 +293,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 </script>
+
 
 </body>
 </html>
