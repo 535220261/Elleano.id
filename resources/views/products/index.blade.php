@@ -117,11 +117,43 @@
     </div>
 </header>
 
-
-
 <!-- Section -->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
+        <!-- Form Pencarian dan Sorting -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <!-- Form Pencarian -->
+                <form action="{{ route('products.index') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" value="{{ request('search') }}" placeholder="Search products...">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 text-md-end">
+                 <!-- Dropdown Sort -->
+                 <form action="{{ route('products.index') }}" method="GET" class="d-inline">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" value="low_high" id="low_high" {{ request('sort') == 'low_high' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="low_high">Price: Low to High</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" value="high_low" id="high_low" {{ request('sort') == 'high_low' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="high_low">Price: High to Low</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" value="az" id="az" {{ request('sort') == 'az' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="az">A-Z</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" value="za" id="za" {{ request('sort') == 'za' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="za">Z-A</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-2 row-cols-lg-4 justify-content-center">
             @foreach ($products as $product)
                 <div class="col mb-5">
@@ -144,17 +176,17 @@
                             <div class="text-center">
                                 <a class="btn btn-outline-dark mt-auto" href="{{ route('product.show', ['id' => $product->id]) }}">View Product</a>
                                 <a class="btn btn-outline-dark mt-auto ms-2"
-                                href="{{ route('cart.index', ['id' => $product->id]) }}"
-                                onclick="addToCart({{ $product->id }});">
+                                   href="{{ route('cart.index', ['id' => $product->id]) }}"
+                                   onclick="addToCart({{ $product->id }});">
                                     Add to cart
                                 </a>
-
                             </div>
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
+
         <!-- Tombol "Show More" -->
         <div class="text-center mt-4">
             <a href="{{ route('all-products') }}" class="btn btn-primary">Show More</a>
@@ -163,19 +195,21 @@
 </section>
 
 
+
 <script>
 function addToCart(productId) {
-    @if (session('user_id'))
+    @auth
         // Jika user sudah login
-        alert('Product berhasil dimasukkan ke dalam cart!');
-        // Lakukan operasi untuk menambahkan ke cart (misalnya dengan AJAX)
+        alert('Produk berhasil dimasukkan ke dalam cart!');
+        // Lanjutkan proses via fetch/AJAX jika perlu
     @else
         // Jika user belum login
         alert('Anda harus login terlebih dahulu!');
-        window.location.href = '/login';
-    @endif
+        window.location.href = "{{ route('login') }}";
+    @endauth
 }
 </script>
+
 
 <section class="footer flex">
     <div class="footer-logo">
@@ -229,12 +263,10 @@ function addToCart(productId) {
     <div class="contact">
         <h3 class="fs-poppins fs-200 bold-800">Contact Us</h3>
         <p class="fs-montserrat">
-            michael.535220261@stu.untar.ac.id <br>
-            firzi.535220260@stu.untar.ac.id <br>
-            rafael.535220086@stu.untar.ac.id <br>
-            +6285217788878 <br>
-            Universitas Tarumanagara
-        </p>
+            elleanowears@gmail.com <br>
+            +628983877526<br>
+            <br>
+            </p>
     </div>
 
     <form action="/" method="POST" class="emails">

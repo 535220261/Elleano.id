@@ -110,6 +110,39 @@
 <!-- Section -->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
+        <!-- Form Pencarian dan Sorting -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <!-- Form Pencarian -->
+                <form action="{{ route('products.index') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" value="{{ request('search') }}" placeholder="Search products...">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 text-md-end">
+                 <!-- Dropdown Sort -->
+                 <form action="{{ route('products.index') }}" method="GET" class="d-inline">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" value="low_high" id="low_high" {{ request('sort') == 'low_high' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="low_high">Price: Low to High</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" value="high_low" id="high_low" {{ request('sort') == 'high_low' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="high_low">Price: High to Low</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" value="az" id="az" {{ request('sort') == 'az' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="az">A-Z</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" value="za" id="za" {{ request('sort') == 'za' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="form-check-label" for="za">Z-A</label>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-2 row-cols-lg-4 justify-content-center">
             @foreach ($products as $product)
                 @if ($product->is_popular)

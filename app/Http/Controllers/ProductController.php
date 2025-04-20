@@ -137,9 +137,57 @@ public function update(Request $request, $id)
         return view('products.product', ['product' => $product]);
     }
 
-    public function allProduct()
+    public function allProduct(Request $request)
     {
-        $products = Product::all();
+        $query = Product::query();
+    
+        // Tambahkan pencarian jika ingin
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function ($q) use ($request) {
+                $q->where('product_name', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
+        }
+    
+        // Tambahkan sorting jika ingin
+        if ($request->has('sort') && in_array($request->sort, ['low_high', 'high_low'])) {
+            $query->orderBy('price', $request->sort === 'low_high' ? 'asc' : 'desc');
+        }
+    
+        $products = $query->paginate(12); // ✅ Gunakan paginate
+    
         return view('products.all-products', compact('products'));
     }
+    public function index(Request $request)
+    {
+        $query = Product::query();
+    
+        // Menambahkan fitur pencarian
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function ($q) use ($request) {
+                $q->where('product_name', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%');
+            });
+        }
+    
+   // Menambahkan fitur sorting
+   if ($request->has('sort') && in_array($request->sort, ['low_high', 'high_low', 'az', 'za'])) {
+    if ($request->sort === 'low_high') {
+        $query->orderBy('price', 'asc');
+    } elseif ($request->sort === 'high_low') {
+        $query->orderBy('price', 'desc');
+    } elseif ($request->sort === 'az') {
+        $query->orderBy('product_name', 'asc');
+    } elseif ($request->sort === 'za') {
+        $query->orderBy('product_name', 'desc');
+    }
 }
+    
+        // Menampilkan produk dengan pagination
+        $products = $query->paginate(12);
+    
+        return view('products.index', compact('products'));
+    }
+}    
+
+
