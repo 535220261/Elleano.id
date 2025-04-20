@@ -96,37 +96,61 @@
 <!-- Product Section -->
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center">
+        <div class="row gx-5">
+            <!-- Image Gallery -->
             <div class="col-md-6">
-                <!-- Display multiple product images -->
-                @if($product->product_images)
-                    @foreach(explode(',', $product->product_images) as $image)
-                        <img class="card-img-top mb-5 mb-md-0" src="{{ asset('images/' . trim($image)) }}" alt="Product Image" style="width: 100%; height: auto;">
+                @php
+                    $images = $product->product_images ? explode(',', $product->product_images) : [];
+                @endphp
+
+                <!-- Main Image -->
+                <div class="mb-3">
+                    <img id="main-image" class="img-fluid" src="{{ asset('images/' . trim($images[0] ?? 'default-product.png')) }}" alt="Product Image" style="border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+
+                <!-- Thumbnail Images -->
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach($images as $image)
+                        <img src="{{ asset('images/' . trim($image)) }}" alt="Thumbnail"
+                             class="img-thumbnail thumb-image"
+                             style="width: 70px; height: 70px; object-fit: cover; cursor: pointer;">
                     @endforeach
-                @else
-                    <img class="card-img-top mb-5 mb-md-0" src="{{ asset('images/default-product.png') }}" alt="Product Image">
-                @endif
+                </div>
             </div>
 
+            <!-- Product Info -->
             <div class="col-md-6">
-                <div class="small mb-1">SKU: {{ $product->id }}</div>
-                <h1 class="display-5 fw-bolder">{{ $product->product_name }}</h1>
-                <div class="fs-5 mb-5">
-                    <span>Rp {{ number_format($product->price, 2) }}</span>
+                <p class="text-muted mb-1">SKU: {{ $product->id }}</p>
+                <h2 class="mb-3">{{ $product->product_name }}</h2>
+
+                <div class="fs-4 fw-bold text-dark mb-3">
+                    IDR {{ number_format($product->price, 0, ',', '.') }}
                 </div>
-                <p class="description-short">{{ Str::limit($product->description, 100) }}</p>
-                <p class="description-full">{{ $product->description }}</p>
-                <button class="btn btn-primary show-more-less">Show More</button>
-                <div class="d-flex">
-                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                        <i class="bi-cart-fill me-1"></i>
-                        Add to cart
+
+                <!-- Short Description -->
+                <p class="description-short" style="color: #555;">
+                    {!! nl2br(e(Str::limit($product->description, 100))) !!}
+                </p>
+
+                <!-- Full Description -->
+                <p class="description-full d-none" style="color: #555;">
+                    {!! nl2br(e($product->description)) !!}
+                </p>
+
+        <button class="btn btn-link text-decoration-underline p-0 mb-3 show-more-less">Show More</button>
+
+
+                <!-- Add to Cart Button -->
+                <div class="d-grid">
+                    <button class="btn btn-dark btn-lg rounded-3">
+                        <i class="bi bi-cart-fill me-2"></i> Add to Cart
                     </button>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 
 <section class="footer flex">
     <div class="footer-logo">
@@ -215,6 +239,29 @@
 
 <!-- Core theme JS -->
 <script src="{{ asset('js/scripts.js') }}"></script>
+
+<script>
+    document.querySelectorAll('.thumb-image').forEach(img => {
+        img.addEventListener('click', function () {
+            document.getElementById('main-image').src = this.src;
+        });
+    });
+
+    document.querySelector('.show-more-less')?.addEventListener('click', function () {
+        const fullDesc = document.querySelector('.description-full');
+        const shortDesc = document.querySelector('.description-short');
+
+        if (fullDesc.classList.contains('d-none')) {
+            fullDesc.classList.remove('d-none');
+            shortDesc.classList.add('d-none');
+            this.textContent = "Show Less";
+        } else {
+            fullDesc.classList.add('d-none');
+            shortDesc.classList.remove('d-none');
+            this.textContent = "Show More";
+        }
+    });
+</script>
 
 <!-- Custom JS for Show More/Less -->
 <script>
