@@ -26,11 +26,8 @@ Route::delete('/products/{product}', [ProductController::class, 'destroy'])->nam
 // Route to display a specific product
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('product.show');
 
-// Routes untuk keranjang belanja
+// Routes untuk cart
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
 // routes/web.php
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');

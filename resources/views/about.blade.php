@@ -19,192 +19,34 @@
 </head>
 <body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('images/elleano.png') }}" alt="Logo" style="height: 100px; width: auto;"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('about') }}">About</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ route('all-products') }}">All Products</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{ route('popular-items') }}">Popular Items</a></li>
-                        <li><a class="dropdown-item" href="{{ route('new-arrivals') }}">New Arrivals</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <form class="d-flex me-3" action="/cart" method="get">
-                <button class="btn btn-outline-dark" type="submit">
-                    <i class="bi-cart-fill me-1"></i>
-                    Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">
-                        {{ session('cart') ? count(session('cart')) : 0 }}
-                    </span>
-                </button>
-            </form>
-            <div class="d-flex">
-                @if (session('user_name'))
-                    <div class="d-flex align-items-center">
-                    <a href="account.php" class="me-2">Welcome, {{ session('user_name') }}</a>
-                    <a href="logout.php" class="btn btn-outline-dark">Logout</a>
-                    </div>
-                @else
-                    <a href="login.php" class="d-flex align-items-center">
-                        <img src="{{ asset('images/avatar.png') }}" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
-                    </a>
-                @endif
-            </div>
-        </div>
-    </div>
-</nav>
+@include('layouts.navbar')
+@include('layouts.header')
 
-<header>
-    <div class="container-fluid px-0">
-        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                <!-- Tambahkan button sesuai dengan jumlah slide yang Anda miliki -->
-            </div>
-            <div class="carousel-inner">
-                @php
-                    $images = [
-                        'banner2.jpg',
-                        'banner3.jpg',
-                        'banner4.jpg',
-                    ];
-                @endphp
-                @foreach ($images as $key => $image)
-                    <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-                        <img src="{{ asset('images/' . $image) }}" class="d-block w-100" style="object-fit: cover; height: 100vh; max-width: 100%;" alt="Slide {{ $key + 1 }}">
-                    </div>
-                @endforeach
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
+<header class="bg-white py-10">
+    <div class="container mx-auto px-4 text-center">
+        
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800">About <img src="{{ asset('images/elleano.png') }}" alt="Elleano Logo" style="height: 200px; width: auto;"></h1>
     </div>
 </header>
 
-    <header>
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-black">
-                <h1 class="display-4 fw-bolder">About Elleano.id</h1>
-           </div>
-        </div>
-        </header>
-        <div class="flex flex-col lg:flex-row gap-6 md:gap-10 md:px-24">
-      <div class="grow flex flex-col justify-center lg:order-last">
-                  <h1 class="mb-4 md:mb-6 font-secondary font-bold text-2xl md:text-4.5xl">Why choose Elleano.id</h1>
-                <div class="md:mb-6 prose md:prose-base">
-          <p><span style="font-weight: 400;">Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.</span></p>
-<h4>Free Shipping All Over in Indonesia</h4>
-<p>Find hundred of the latest products only on Elleano.id. Follow our social media and visit our E-Commerce to enjoy various attractive promotions, including free shipping, and clearance sale discounts.</p>
-        </div>
-              </div>
-      <!-- <div class="flex-none">
-      <img class="lg:max-w-483 md:sticky md:top-32" src="images/banner4.jpeg" alt="">
-      </div> -->
-          </div>
- 
-          <section class="footer flex">
-    <div class="footer-logo">
-        <img src="{{ asset('images/elleano.png') }}" alt="Logo" style="height: 200px; width: auto;">
-        <p class="fs-montserrat fs-200">
-            Elleano.id is a fashion brand that prioritizes comfort and fit for petite women with a focus on creating clothes that are both snug and comfortable. Elleano.id aspire to become the ultimate fashion destination for petite women, providing a diverse and high-quality collection to enhance their confidence and lifestyle.
-        </p>
-    </div>
-
-    <div class="social-icons">
-        <div class="social-media">
-            <h3>Our Social Media</h3>
-            <a href="https://www.tiktok.com/@elleano.id"><img src="{{ asset('images/tiktok.png') }}" alt="Logo" style="height: 60px; width: auto;"></a>
-            <a href="https://www.instagram.com/elleano.id?igsh=MXByZXFuYjM5MWd4cQ=="><img src="{{ asset('images/instagram.png') }}" alt="Logo" style="height: 60px; width: auto;"></a>
-        </div>
-
-        <div class="footer-menu">
-            <h3 class="fs-poppins fs-200 bold-800">Official Store</h3>
-            <ul>
-                <li>
-                    <a href="https://shopee.co.id/elleano.id"><img src="{{ asset('images/shopee.png') }}" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-                <li>
-                    <a href="https://www.tokopedia.com/elleanowears"><img src="{{ asset('images/tokopedia.png') }}" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-                <li>
-                    <a href="https://www.tiktok.com/@elleano.id"><img src="{{ asset('images/tiktokshop.png') }}" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-                <li>
-                    <a href="https://www.lazada.co.id/shop/elleano-id"><img src="{{ asset('images/lazada.png') }}" alt="Logo" style="height: 40px; width: auto;"></a>
-                </li>
-            </ul>
-            <h3 class="fs-poppins fs-200 bold-800">Shipping Options</h3>
-            <ul>
-                <li>
-                    <img src="{{ asset('images/JNE.png') }}" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-                <li>
-                    <img src="{{ asset('images/J&T.png') }}" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-                <li>
-                    <img src="{{ asset('images/sicepat.png') }}" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-                <li>
-                    <img src="{{ asset('images/spx.png') }}" alt="Logo" style="height: 40px; width: auto;">
-                </li>
-            </ul>
+<section class="about-section">
+    <!-- Konten -->
+    <div class="about-content">
+        <h2>Mengapa Memilih Elleano.id ?</h2>
+        <div class="about-text">
+            <p>
+                <strong>Elleano.id</strong> adalah brand fashion yang mengutamakan kenyamanan dan kesesuaian ukuran untuk wanita bertubuh kecil (petite), dengan fokus menciptakan pakaian yang pas dan nyaman dipakai.
+                Elleano.id bercita-cita menjadi destinasi fashion utama bagi wanita petite dengan koleksi yang beragam dan berkualitas tinggi untuk meningkatkan kepercayaan diri dan gaya hidup mereka.
+            </p>
+            <h4>Gratis Ongkir ke Seluruh Indonesia</h4>
+            <p>
+                Temukan ratusan produk terbaru hanya di Elleano.id. Ikuti media sosial kami dan kunjungi platform e-commerce kami untuk menikmati berbagai promo menarik seperti gratis ongkir dan diskon cuci gudang.
+            </p>
         </div>
     </div>
-
-    <div class="contact">
-        <h3 class="fs-poppins fs-200 bold-800">Contact Us</h3>
-        <p class="fs-montserrat">
-            michael.535220261@stu.untar.ac.id <br>
-            firzi.535220260@stu.untar.ac.id <br>
-            rafael.535220086@stu.untar.ac.id <br>
-            +6285217788878 <br>
-            Universitas Tarumanagara
-        </p>
-    </div>
-
-    <form action="/" method="POST" class="emails">
-        <h3 class="fs-poppins fs-200 bold-800">Subscribe To Our Email</h3>
-        <p class="updates fs-poppins fs-300 bold-800">
-            For Latest News & Updates
-        </p>
-        <div class="inputField flex bg-gray">
-            <input type="email" name="email" placeholder="Enter Your Email" class="fs-montserrat bg-gray"/>
-        </div>
-        <button class="bg-black text-white fs-poppins fs-50">Subscribe</button>
-    </form>
 </section>
 
-<!-- Footer -->
-<footer class="py-5 bg-dark">
-    <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Elleano.id 2024</p>
-    </div>
-</footer>
-
-
+@include('layouts.footer')
     <!-- Bootstrap core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 

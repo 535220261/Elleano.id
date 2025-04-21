@@ -10873,3 +10873,35 @@ textarea.form-control-lg {
 .contact, .emails {
     max-width: 500px; /* Optional: limit max-width for these sections */
 }
+
+.about-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.about-content {
+  color: #333;
+  flex: 1;
+}
+
+.about-content h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.about-text {
+  text-align: justify;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.about-text h4 {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
