@@ -93,7 +93,6 @@
     </div>
 </section>
 
-
 @include('layouts.footer')
 
 <!-- Bootstrap core JS -->

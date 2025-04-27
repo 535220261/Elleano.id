@@ -60,52 +60,23 @@ class ProductController extends Controller
 
 public function update(Request $request, $id)
 {
-    // Validasi input
-    $validatedData = $request->validate([
-        'product_name' => 'required|string',
-        'description' => 'required|string',
-        'price' => 'required|numeric',
-        'is_new' => 'nullable|boolean',
-        'is_popular' => 'nullable|boolean',
-        'product_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
-    ]);
+    $product = Product::findOrFail($id);
 
-    try {
-        // Cari produk berdasarkan ID, jika tidak ditemukan, lempar exception
-        $product = Product::findOrFail($id);
+    $product->product_name = $request->input('product_name');
+    $product->description = $request->input('description');
+    $product->price = $request->input('price');
+    $product->is_new = $request->has('is_new');
+    $product->is_popular = $request->has('is_popular');
 
-        // Update data produk
-        $product->product_name = $validatedData['product_name'];
-        $product->description = $validatedData['description'];
-        $product->price = $validatedData['price'];
-        $product->is_new = $request->has('is_new');
-        $product->is_popular = $request->has('is_popular');
-
-        // Proses gambar baru jika ada
-        if ($request->hasFile('product_images')) {
-            $images = [];
-            foreach ($request->file('product_images') as $file) {
-                $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('public/images', $filename);
-                $images[] = $filename;
-            }
-
-            // Hapus gambar lama sebelum menyimpan gambar yang baru
-            $this->deleteOldImages($product);
-
-            // Simpan nama-nama file baru ke dalam kolom product_images
-            $product->product_images = implode(',', $images);
-        }
-
-        // Simpan perubahan
-        $product->save();
-
-        return redirect()->route('admin.dashboard')->with('success', 'Produk berhasil diperbarui.');
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Gagal memperbarui produk. Error: ' . $e->getMessage());
+    // Simpan file gambar jika ada
+    if ($request->hasFile('product_images')) {
+        // Simpan gambar dan update path-nya sesuai logika kamu
     }
-}
 
+    $product->save();
+
+    return redirect()->back()->with('success', 'Produk berhasil diupdate');
+}
 
     public function destroy(Product $product)
     {
@@ -154,10 +125,11 @@ public function update(Request $request, $id)
             $query->orderBy('price', $request->sort === 'low_high' ? 'asc' : 'desc');
         }
     
-        $products = $query->paginate(12); // ✅ Gunakan paginate
-    
+        $products = $query->get();
+
         return view('products.all-products', compact('products'));
     }
+
     public function index(Request $request)
     {
         $query = Product::query();

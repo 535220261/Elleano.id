@@ -16,45 +16,58 @@ class CartController extends Controller
         return view('products.cart', compact('cartItems'));
     }
 
-    public function add($id)
+    public function addItem(Request $request)
     {
-        // Ambil data cart dari session
-        $cart = session()->get('cart', []);
-
-        // Tambahkan item ke dalam cart
-        if (!in_array($id, $cart)) {
-            $cart[] = $id;
+        $request->validate([
+            'product_id' => 'required|exists:products,id', // validasi produk yang ada
+            'quantity' => 'required|integer|min:1'
+        ]);
+    
+        $cartItem = CartItem::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'product_id' => $request->product_id
+            ],
+            [
+                'quantity' => \DB::raw("quantity + {$request->quantity}")
+            ]
+        );
+    
+        return response()->json($cartItem, 201);
+    }
+    public function viewCart()
+    {
+        $cartItems = CartItem::with('product')->where('user_id', auth()->id())->get();
+        return response()->json($cartItems);
+    }
+    public function updateItem(Request $request, $id)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1'
+        ]);
+    
+        $cartItem = CartItem::where('user_id', auth()->id())->where('id', $id)->first();
+    
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item not found'], 404);
         }
-
-        // Simpan kembali data cart ke dalam session
-        session()->put('cart', $cart);
-
-        // Redirect ke halaman index cart
-        return redirect()->route('cart.index');
+    
+        $cartItem->quantity = $request->quantity;
+        $cartItem->save();
+    
+        return response()->json($cartItem);
     }
-
-    public function remove($id)
+    public function removeItem($id)
     {
-        // Ambil data cart dari session
-        $cart = session()->get('cart', []);
-
-        // Hapus item dari cart
-        $cart = array_diff($cart, [$id]);
-
-        // Simpan kembali data cart ke dalam session
-        session()->put('cart', $cart);
-
-        // Redirect ke halaman index cart
-        return redirect()->route('cart.index');
+        $cartItem = CartItem::where('user_id', auth()->id())->where('id', $id)->first();
+    
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+    
+        $cartItem->delete();
+    
+        return response()->json(['message' => 'Item removed']);
     }
-
-    public function checkout()
-    {
-        // Proses checkout bisa diimplementasikan di sini
-        // Contoh sederhana, kosongkan session cart setelah checkout
-        session()->forget('cart');
-
-        // Redirect ke halaman sukses checkout atau halaman lainnya
-        return redirect()->route('cart.index')->with('success_message', 'Checkout berhasil dilakukan!');
-    }
+                
 }

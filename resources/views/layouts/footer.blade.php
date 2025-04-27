@@ -55,7 +55,6 @@
     Whatsapp : <a href="https://wa.me/628983877526" target="_blank">+62 898 3877 526 (WA only)</a><br>
     (Monday–Saturday: 09:00 – 17:00)
 </p>
-
     </div>
 
     <form action="/" method="POST" class="emails">

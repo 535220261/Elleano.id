@@ -26,20 +26,29 @@
                 </li>
             </ul>
             
-            <form class="d-flex me-3" action="{{ Auth::check() ? route('cart.index') : route('login') }}" method="get">
-    <button class="btn btn-outline-dark" type="submit">
-        <i class="bi-cart-fill me-1"></i>
-        Cart
-        <span class="badge bg-dark text-white ms-1 rounded-pill">
-            {{ session('cart') ? count(session('cart')) : 0 }}
-        </span>
-    </button>
-</form>
+            <div class="d-flex me-3">
+    @if (Auth::check())
+        <a href="{{ route('cart.index') }}" class="btn btn-outline-dark">
+            <i class="bi-cart-fill me-1"></i>
+            Cart
+            <span class="badge bg-dark text-white ms-1 rounded-pill">
+                {{ session('cart') ? count(session('cart')) : 0 }}
+            </span>
+        </a>
+    @else
+        <a href="{{ route('login') }}" class="btn btn-outline-dark">
+            <i class="bi-cart-fill me-1"></i>
+            Cart
+            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+        </a>
+    @endif
+</div>
+
 
             <div class="d-flex">
                 @if (session('user_name'))
                     <div class="d-flex align-items-center">
-                        <a href="account.php" class="me-2">Welcome, {{ session('user_name') }}</a>
+                        <a href="{{ route('account') }}" class="me-2">Welcome, {{ session('user_name') }}</a>
                         <a href="{{ route('logout') }}" class="btn btn-outline-dark"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout

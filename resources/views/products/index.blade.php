@@ -23,7 +23,6 @@
 
 @include('layouts.navbar')
 @include('layouts.header')
-
 <!-- Section -->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
@@ -33,23 +32,29 @@
                 <!-- Form Pencarian -->
                 <form action="{{ route('products.index') }}" method="GET">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="search" value="{{ request('search') }}" placeholder="Search products...">
+                        <input type="text" class="form-control" name="search" value="{{ request('search') }}" placeholder="Cari Produk...">
                         <button class="btn btn-primary" type="submit">Search</button>
                     </div>
                 </form>
+                @if($products->isEmpty())
+    <div class="text-center py-5">
+        <h5 class="text-muted">Produk tidak ditemukan 😥</h5>
+        <p>Coba gunakan kata kunci lain atau filter yang berbeda.</p>
+    </div>
+@endif
             </div>
             <div class="col-md-6 text-md-end">
                  <!-- Dropdown Sort -->
-<form action="{{ route('products.index') }}" method="GET" class="d-inline">
+                 <form action="{{ route('products.index') }}" method="GET" class="d-inline">
+    <input type="hidden" name="search" value="{{ request('search') }}">
     <select name="sort" class="form-select d-inline w-auto" onchange="this.form.submit()">
-        <option disabled selected>Sort by</option>
+        <option disabled {{ request('sort') ? '' : 'selected' }}>Sort by</option>
         <option value="low_high" {{ request('sort') == 'low_high' ? 'selected' : '' }}>Price: Low to High</option>
         <option value="high_low" {{ request('sort') == 'high_low' ? 'selected' : '' }}>Price: High to Low</option>
         <option value="az" {{ request('sort') == 'az' ? 'selected' : '' }}>A-Z</option>
         <option value="za" {{ request('sort') == 'za' ? 'selected' : '' }}>Z-A</option>
     </select>
 </form>
-
             </div>
         </div>
 

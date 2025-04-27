@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
 
 // Routes untuk halaman utama
@@ -23,7 +24,7 @@ Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('pro
 Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
 Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
-// Route to display a specific product
+// Routes untuk menampilkan produk spesifik
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('product.show');
 
 // Routes untuk cart
@@ -40,3 +41,5 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/account', [AccountController::class, 'index'])->name('account');
