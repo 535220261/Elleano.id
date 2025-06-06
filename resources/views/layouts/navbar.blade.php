@@ -27,42 +27,41 @@
             </ul>
             
             <div class="d-flex me-3">
-    @if (Auth::check())
-        <a href="{{ route('cart.index') }}" class="btn btn-outline-dark">
-            <i class="bi-cart-fill me-1"></i>
-            Cart
-            <span class="badge bg-dark text-white ms-1 rounded-pill">
-                {{ session('cart') ? count(session('cart')) : 0 }}
-            </span>
+<!-- Tombol Cart -->
+@if (Auth::check())
+    <a href="{{ route('cart.index') }}" class="btn btn-outline-dark">
+        <i class="bi-cart-fill me-1"></i>
+        Cart
+        <span class="badge bg-dark text-white ms-1 rounded-pill">
+            {{ session('cart') ? count(session('cart')) : 0 }}
+        </span>
+    </a>
+@else
+    <a href="{{ route('login', ['redirect' => 'cart']) }}" class="btn btn-outline-dark">
+        <i class="bi-cart-fill me-1"></i>
+        Cart
+        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+    </a>
+@endif
+
+<!-- User Avatar dan Greeting -->
+<div class="d-flex">
+    @if (session('user_name'))
+        <a href="{{ route('profile') }}" class="d-flex align-items-center text-decoration-none">
+            <img src="{{ session('user_avatar') ? asset('storage/' . session('user_avatar')) : asset('images/avatar.png') }}"
+                alt="User Avatar"
+                class="rounded-circle me-2"
+                style="width: 40px; height: 40px; object-fit: cover;">
+            <span>Hi, {{ session('user_name') }}</span>
         </a>
     @else
-        <a href="{{ route('login') }}" class="btn btn-outline-dark">
-            <i class="bi-cart-fill me-1"></i>
-            Cart
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+        <a href="{{ route('register') }}" class="d-flex align-items-center">
+            <img src="{{ asset('images/avatar.png') }}" alt="Avatar"
+                class="rounded-circle" style="width: 40px; height: 40px;">
         </a>
     @endif
 </div>
 
-
-            <div class="d-flex">
-                @if (session('user_name'))
-                    <div class="d-flex align-items-center">
-                        <a href="{{ route('account') }}" class="me-2">Welcome, {{ session('user_name') }}</a>
-                        <a href="{{ route('logout') }}" class="btn btn-outline-dark"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </div>
-                @else
-                    <a href="{{ route('register') }}" class="d-flex align-items-center">
-                        <img src="{{ asset('images/avatar.png') }}" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
-                    </a>
-                @endif
-            </div>
         </div>
     </div>
 </nav>

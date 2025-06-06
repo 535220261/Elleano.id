@@ -21,6 +21,8 @@
             {{ session('success') }}
         </div>
     @endif
+
+    @include('layouts.navbar')
     
     <form id="update-product-form" action="{{ route('products.update', ['id' => $product->id]) }}" method="POST" enctype="multipart/form-data">
     @csrf

@@ -51,8 +51,11 @@
     <div class="contact">
         <h3 class="fs-poppins fs-200 bold-800">Contact Us</h3>
         <p class="fs-montserrat">
-    Email : <a href="mailto:elleanowears@gmail.com">elleanowears@gmail.com</a> <br>
-    Whatsapp : <a href="https://wa.me/628983877526" target="_blank">+62 898 3877 526 (WA only)</a><br>
+    Email : <br>
+    <a href="mailto:elleanowears@gmail.com">elleanowears@gmail.com</a> <br>
+    Whatsapp : <br>
+    <a href="https://wa.me/628983877526" target="_blank">+62 898 3877 526 (WA only)</a><br>
+    Operation Hours: <br>
     (Monday–Saturday: 09:00 – 17:00)
 </p>
     </div>

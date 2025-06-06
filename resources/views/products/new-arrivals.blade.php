@@ -89,11 +89,18 @@
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center">
                                     <a class="btn btn-outline-dark mt-auto" href="{{ route('product.show', ['id' => $product->id]) }}">View Product</a>
-                                    <a class="btn btn-outline-dark mt-auto ms-2"
-                                       href="{{ Auth::check() ? route('cart.add', ['id' => $product->id]) : route('login') }}"
-                                       onclick="{{ Auth::check() ? 'addToCart('.$product->id.')' : 'return false;' }}">
-                                        Add to cart
-                                    </a>
+                                    <!-- Tombol “Add to cart” dengan pengecekan login -->
+@if (Auth::check())
+    <a class="btn btn-outline-dark mt-auto ms-2"
+       href="{{ route('cart.add', ['productId' => $product->id]) }}">
+        Add to cart
+    </a>
+@else
+    <a class="btn btn-outline-dark mt-auto ms-2"
+       href="{{ route('login', ['redirect' => urlencode(route('cart.add', ['productId' => $product->id])) ]) }}">
+        Add to cart
+    </a>
+@endif
                                 </div>
                             </div>
                         </div>

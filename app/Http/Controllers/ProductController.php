@@ -111,16 +111,14 @@ public function update(Request $request, $id)
     public function allProduct(Request $request)
     {
         $query = Product::query();
-    
-        // Tambahkan pencarian jika ingin
+
         if ($request->has('search') && $request->search != '') {
             $query->where(function ($q) use ($request) {
                 $q->where('product_name', 'like', '%' . $request->search . '%')
                   ->orWhere('description', 'like', '%' . $request->search . '%');
             });
         }
-    
-        // Tambahkan sorting jika ingin
+
         if ($request->has('sort') && in_array($request->sort, ['low_high', 'high_low'])) {
             $query->orderBy('price', $request->sort === 'low_high' ? 'asc' : 'desc');
         }
@@ -134,15 +132,10 @@ public function update(Request $request, $id)
     {
         $query = Product::query();
     
-        // Menambahkan fitur pencarian
-        if ($request->has('search') && $request->search != '') {
-            $query->where(function ($q) use ($request) {
-                $q->where('product_name', 'like', '%' . $request->search . '%')
-                  ->orWhere('description', 'like', '%' . $request->search . '%');
-            });
-        }
+            if ($request->has('search') && $request->search != '') {
+        $query->where('product_name', 'LIKE', '%' . $request->search . '%');
+    }
     
-   // Menambahkan fitur sorting
    if ($request->has('sort') && in_array($request->sort, ['low_high', 'high_low', 'az', 'za'])) {
     if ($request->sort === 'low_high') {
         $query->orderBy('price', 'asc');
@@ -157,7 +150,12 @@ public function update(Request $request, $id)
     
         // Menampilkan produk dengan pagination
         $products = $query->paginate(12);
-    
+
+            if ($request->ajax()) {
+        return response()->json([
+            'html' => view('partials.products', compact('products'))->render()
+        ]);
+    }
         return view('products.index', compact('products'));
     }
 }    

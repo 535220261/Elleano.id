@@ -2,72 +2,78 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Session;
 
 class CartController extends Controller
 {
+    // Menampilkan halaman keranjang
     public function index()
     {
-        // Ambil data cart dari session
-        $cartItems = session()->get('cart', []);
-
-        // Kirim data ke view
-        return view('products.cart', compact('cartItems'));
+        $cart = session('cart', []);
+        return view('products.cart', compact('cart'));
     }
 
-    public function addItem(Request $request)
+    // Menambahkan produk ke dalam cart
+    public function addToCart($productId)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id', // validasi produk yang ada
-            'quantity' => 'required|integer|min:1'
-        ]);
-    
-        $cartItem = CartItem::updateOrCreate(
-            [
-                'user_id' => auth()->id(),
-                'product_id' => $request->product_id
-            ],
-            [
-                'quantity' => \DB::raw("quantity + {$request->quantity}")
-            ]
-        );
-    
-        return response()->json($cartItem, 201);
-    }
-    public function viewCart()
-    {
-        $cartItems = CartItem::with('product')->where('user_id', auth()->id())->get();
-        return response()->json($cartItems);
-    }
-    public function updateItem(Request $request, $id)
-    {
-        $request->validate([
-            'quantity' => 'required|integer|min:1'
-        ]);
-    
-        $cartItem = CartItem::where('user_id', auth()->id())->where('id', $id)->first();
-    
-        if (!$cartItem) {
-            return response()->json(['message' => 'Item not found'], 404);
+        $product = Product::findOrFail($productId);
+
+        // Ambil string product_images, lalu explode menjadi array
+        $imagesString = $product->product_images;
+        $imagesArray  = $imagesString 
+            ? explode(',', $imagesString) 
+            : [];
+
+        // Ambil elemen pertama, atau fallback ke default.jpg
+        $firstImage = count($imagesArray) 
+            ? trim($imagesArray[0]) 
+            : 'default.jpg';
+
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$productId])) {
+            $cart[$productId]['quantity']++;
+        } else {
+            $cart[$productId] = [
+                'name'     => $product->product_name,
+                'price'    => $product->price,
+                'quantity' => 1,
+                'images'   => $firstImage,
+            ];
         }
-    
-        $cartItem->quantity = $request->quantity;
-        $cartItem->save();
-    
-        return response()->json($cartItem);
+
+        session()->put('cart', $cart);
+        return redirect()->route('cart.index');
     }
-    public function removeItem($id)
-    {
-        $cartItem = CartItem::where('user_id', auth()->id())->where('id', $id)->first();
-    
-        if (!$cartItem) {
-            return response()->json(['message' => 'Item not found'], 404);
-        }
-    
-        $cartItem->delete();
-    
-        return response()->json(['message' => 'Item removed']);
+    public function ajaxDelete(Request $request)
+{
+    $cart = session()->get('cart', []);
+    $id = $request->id;
+
+    if (isset($cart[$id])) {
+        unset($cart[$id]);
+        session()->put('cart', $cart);
+        return response()->json(['success' => true]);
     }
-                
+
+    return response()->json(['success' => false], 400);
+}
+
+public function ajaxUpdate(Request $request)
+{
+    $cart = session()->get('cart', []);
+    $id = $request->id;
+    $quantity = $request->quantity;
+
+    if (isset($cart[$id])) {
+        $cart[$id]['quantity'] = max(1, (int)$quantity); // minimal qty = 1
+        session()->put('cart', $cart);
+        return response()->json(['success' => true]);
+    }
+
+    return response()->json(['success' => false], 400);
+}
+
 }

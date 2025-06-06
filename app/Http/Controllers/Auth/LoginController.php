@@ -33,6 +33,7 @@ class LoginController extends Controller
                 // Jika user adalah admin, redirect ke dashboard admin
                 session()->put('user_name', auth()->user()->name);
                 return redirect()->route('admin.dashboard');
+                session()->put('user_avatar', auth()->user()->avatar);
             } else {
                 // Jika user bukan admin, redirect ke halaman utama
                 session()->put('user_name', auth()->user()->name);
@@ -58,6 +59,7 @@ class LoginController extends Controller
 
         // Hapus session user_name saat logout
         session()->forget('user_name');
+        session()->forget('user_avatar');
 
         return redirect('/');
     }

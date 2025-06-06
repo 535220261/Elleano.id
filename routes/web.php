@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ProfilePictureController;
 use Illuminate\Support\Facades\Route;
 
 // Routes untuk halaman utama
@@ -28,7 +29,12 @@ Route::delete('/products/{product}', [ProductController::class, 'destroy'])->nam
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('product.show');
 
 // Routes untuk cart
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/update', [CartController::class, 'ajaxUpdate'])->name('cart.ajaxUpdate');
+Route::post('/cart/delete', [CartController::class, 'ajaxDelete'])->name('cart.ajaxDelete');
 
 // routes/web.php
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -42,4 +48,24 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/account', [AccountController::class, 'index'])->name('account');
+Route::get('/profile', [AccountController::class, 'index'])->name('profile');
+Route::post('/profile-picture/create', [ProfilePictureController::class, 'create'])->name('profile-picture.create');
+Route::get('/profile-picture/edit', [ProfilePictureController::class, 'edit'])->name('profile-picture.edit');
+Route::post('/profile-picture/update', [ProfilePictureController::class, 'update'])->name('profile-picture.update');
+Route::delete('/profile-picture', [ProfilePictureController::class, 'destroy'])->name('profile-picture.destroy');
+
+Route::put('/profile/update', [UserController::class, 'update'])->name('profile.update');
+Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+
+Route::get('/payment-transaction', function () {
+    return view('profile.payment_transaction');
+})->name('payment_transaction');
+
+Route::get('/security', function () {
+    return view('profile.security');
+})->name('security');
+
+Route::get('/notifications', function () {
+    return view('profile.notifications');
+})->name('notifications');

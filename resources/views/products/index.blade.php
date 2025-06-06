@@ -79,11 +79,18 @@
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                             <div class="text-center">
                                 <a class="btn btn-outline-dark mt-auto" href="{{ route('product.show', ['id' => $product->id]) }}">View Product</a>
-                                <a class="btn btn-outline-dark mt-auto ms-2"
-                                   href="{{ route('cart.index', ['id' => $product->id]) }}"
-                                   onclick="addToCart({{ $product->id }});">
-                                    Add to cart
-                                </a>
+                                <!-- Tombol “Add to cart” dengan pengecekan login -->
+@if (Auth::check())
+    <a class="btn btn-outline-dark mt-auto ms-2"
+       href="{{ route('cart.add', ['productId' => $product->id]) }}">
+        Add to cart
+    </a>
+@else
+    <a class="btn btn-outline-dark mt-auto ms-2"
+       href="{{ route('login', ['redirect' => urlencode(route('cart.add', ['productId' => $product->id])) ]) }}">
+        Add to cart
+    </a>
+@endif
                             </div>
                         </div>
                     </div>
@@ -103,9 +110,14 @@
 <script>
 function addToCart(productId) {
     @auth
-        // Jika user sudah login
-        alert('Produk berhasil dimasukkan ke dalam cart!');
-        // Lanjutkan proses via fetch/AJAX jika perlu
+        // Kirim request untuk menambahkan produk ke cart
+        fetch(`{{ url('cart/add') }}/${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.success);
+                // Anda bisa menambahkan pembaruan UI di sini jika diperlukan
+            })
+            .catch(error => alert('Terjadi kesalahan.'));
     @else
         // Jika user belum login
         alert('Anda harus login terlebih dahulu!');

@@ -41,13 +41,17 @@
                             <span class="description-full" style="display: none;">{{ $product->description }}</span>
                             <button class="btn btn-link p-0" id="showMoreBtn">Lihat Selengkapnya</button>
                         </p>
-                        <div class="d-flex">
-                            <input id="inputQuantity" class="form-control text-center me-3" type="number" value="1" min="1" style="max-width: 3rem">
-                            <button id="addToCartBtn" class="btn btn-outline-dark flex-shrink-0" type="button">
-                                <i class="bi-cart-fill me-1"></i>
-                                Add to cart
-                            </button>
-                        </div>
+                            <div class="d-flex">
+                                <input id="inputQuantity" class="form-control text-center me-3" type="number" value="1" min="1" style="max-width: 3rem">
+                                <button id="addToCartBtn"
+        class="btn btn-outline-dark flex-shrink-0"
+        type="button"
+        data-product-id="{{ $product->id }}">
+    <i class="bi-cart-fill me-1"></i>
+    Add to cart
+</button>
+
+                            </div>
                     </div>
                 </div>
             </div>
@@ -81,7 +85,7 @@
                 shortDesc.style.display = 'none';
                 this.textContent = 'Lihat Lebih Sedikit';
             } else {
-                fullDesc.style.display = 'none');
+                fullDesc.style.display = ('none');
                 shortDesc.style.display = 'inline';
                 this.textContent = 'Lihat Selengkapnya';
             }

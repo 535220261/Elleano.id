@@ -13,6 +13,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('password');
             $table->timestamps();
+            $table->string('profile_picture')->nullable();
         });
     }
 

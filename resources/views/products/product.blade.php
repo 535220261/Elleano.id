@@ -84,9 +84,14 @@
 
                 <!-- Add to Cart Button -->
                 <div class="d-grid">
-                    <button class="btn btn-dark btn-lg rounded-3">
-                        <i class="bi bi-cart-fill me-2"></i> Add to Cart
-                    </button>
+                <button id="addToCartBtn"
+        class="btn btn-outline-dark flex-shrink-0"
+        type="button"
+        data-product-id="{{ $product->id }}">
+    <i class="bi-cart-fill me-1"></i>
+    Add to cart
+</button>
+
                 </div>
             </div>
         </div>
@@ -147,6 +152,25 @@
         });
     });
 </script>
+
+
+<script>
+    document.getElementById('addToCartBtn').addEventListener('click', function () {
+        const productId = this.getAttribute('data-product-id');
+
+        @if (Auth::check())
+            // base URL tanpa productId
+            const baseUrl = "{{ url('cart/add') }}";
+            window.location.href = `${baseUrl}/${productId}`;
+        @else
+            const baseUrl = "{{ url('cart/add') }}";
+            const redirectUrl = `${baseUrl}/${productId}`;
+            const loginUrl = "{{ route('login') }}";
+            window.location.href = `${loginUrl}?redirect=${encodeURIComponent(redirectUrl)}`;
+        @endif
+    });
+</script>
+
 <!-- Bootstrap core JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

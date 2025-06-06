@@ -86,5 +86,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     </script>
 @endif
+
+@if (session('message'))
+    <div class="alert alert-warning">
+        {{ session('message') }}
+    </div>
+@endif
 </body>
 </html>

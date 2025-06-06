@@ -6,13 +6,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Elleano Fashion Wears</title>
+    <title>Cart | Elleano</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('images/elleano.png') }}">
 
     <!-- Bootstrap icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Bootstrap core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core theme CSS (includes Bootstrap) -->
     <link href="{{ asset('styles.css') }}" rel="stylesheet">
@@ -22,97 +25,151 @@
 
 @include('layouts.navbar')
 
-@section('head')
-    <link rel="stylesheet" href="{{ asset('css/cart.css') }}">
-@endsection
-<div class="card">
-            <div class="row">
-                <div class="col-md-8 cart">
-                    <div class="title">
-                        <div class="row">
-                            <div class="col"><h4><b>Shopping Cart</b></h4></div>
-                            <div class="col align-self-center text-right text-muted">3 items</div>
-                        </div>
-                    </div>    
-                    <div class="row border-top border-bottom">
-                        <div class="row main align-items-center">
-                            <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
-                            <div class="col">
-                                <div class="row text-muted">Shirt</div>
-                                <div class="row">Cotton T-shirt</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+
+<div class="container py-5">
+    <h1 class="mb-5">Your Shopping Cart</h1>
+    <div class="row">
+        <div class="col-lg-8">
+            @if($cart && count($cart) > 0)
+                @foreach($cart as $productId => $item)
+                    <div class="card mb-4" id="cart-item-{{ $productId }}">
+                        <div class="card-body">
+                            <div class="row cart-item mb-3">
+                                <div class="col-md-3">
+                                <img src="{{ asset('images/' . $item['images']) }}" alt="{{ $item['name'] }}" class="img-fluid rounded">
+                                </div>
+                                <div class="col-md-5">
+                                    <h5 class="card-title">{{ $item['name'] }}</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-secondary btn-sm quantity-decrease" data-id="{{ $productId }}" type="button">-</button>
+                                        <input style="max-width:100px" type="text" class="form-control form-control-sm text-center quantity-input" data-id="{{ $productId }}" value="{{ $item['quantity'] }}">
+                                        <button class="btn btn-outline-secondary btn-sm quantity-increase" data-id="{{ $productId }}" type="button">+</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 text-end">
+                                    <p class="fw-bold">Rp{{ number_format($item['price'], 2) }}</p>
+                                    <button class="btn btn-sm btn-outline-danger remove-item" data-id="{{ $productId }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col">
-                                <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                            </div>
-                            <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="row main align-items-center">
-                            <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/ba3tvGm.jpg"></div>
-                            <div class="col">
-                                <div class="row text-muted">Shirt</div>
-                                <div class="row">Cotton T-shirt</div>
-                            </div>
-                            <div class="col">
-                                <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                            </div>
-                            <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+                            <hr>
                         </div>
                     </div>
-                    <div class="row border-top border-bottom">
-                        <div class="row main align-items-center">
-                            <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/pHQ3xT3.jpg"></div>
-                            <div class="col">
-                                <div class="row text-muted">Shirt</div>
-                                <div class="row">Cotton T-shirt</div>
-                            </div>
-                            <div class="col">
-                                <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                            </div>
-                            <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                        </div>
-                    </div>
-                    <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
-                </div>
-                <div class="col-md-4 summary">
-                    <div><h5><b>Summary</b></h5></div>
-                    <hr>
-                    <div class="row">
-                        <div class="col" style="padding-left:0;">ITEMS 3</div>
-                        <div class="col text-right">&euro; 132.00</div>
-                    </div>
-                    <form>
-                        <p>SHIPPING</p>
-                        <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>
-                        <p>GIVE CODE</p>
-                        <input id="code" placeholder="Enter your code">
-                    </form>
-                    <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                        <div class="col">TOTAL PRICE</div>
-                        <div class="col text-right">&euro; 137.00</div>
-                    </div>
-                    <button class="btn">CHECKOUT</button>
-                </div>
+                @endforeach
+            @else
+                <p>Your cart is empty!</p>
+            @endif
+
+            <!-- Continue Shopping Button -->
+            <div class="text-start mb-4">
+                <a href="{{ route('all-products') }}" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                </a>
             </div>
-            
         </div>
 
-    <div class="container">
-        <h1>Your Cart</h1>
-        @if(session('cart') && count(session('cart')) > 0)
-            <ul class="list-group">
-                @foreach(session('cart') as $item)
-                    <li class="list-group-item">
-                        {{ $item['name'] }} - {{ $item['quantity'] }} x {{ $item['price'] }}
-                    </li>
-                @endforeach
-            </ul>
-        @else
-            <p>Your cart is empty!</p>
-        @endif
-    </div>
+        <div class="col-lg-4">
+            <!-- Cart Summary -->
+            @if(session('cart') && count(session('cart')) > 0)
+                <div class="card cart-summary">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Order Summary</h5>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Subtotal</span>
+                            <span>Rp{{ number_format(array_sum(array_map(function ($item) {
+                                return $item['price'] * $item['quantity'];
+                            }, session('cart'))), 2) }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Shipping</span>
+                            <span>Rp</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Tax</span>
+                            <span>Rp</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Insurance</span>
+                            <span>Rp</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <strong>Total</strong>
+                            <strong>Rp{{ number_format(array_sum(array_map(function ($item) {
+                                return $item['price'] * $item['quantity'];
+                            }, session('cart'))), 2) }}</strong>
+                        </div>
+                        <button class="btn btn-primary w-100">Proceed to Checkout</button>
+                    </div>
+                </div>
+            @endif
 
+            <!-- Promo Code -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Apply Promo Code</h5>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Enter promo code">
+                        <button class="btn btn-outline-secondary" type="button">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @include('layouts.footer')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Increase quantity
+        $('.quantity-increase').click(function () {
+            const id = $(this).data('id');
+            let input = $('.quantity-input[data-id="' + id + '"]');
+            let qty = parseInt(input.val()) + 1;
+            updateQuantity(id, qty);
+            input.val(qty);
+        });
+
+        // Decrease quantity
+        $('.quantity-decrease').click(function () {
+            const id = $(this).data('id');
+            let input = $('.quantity-input[data-id="' + id + '"]');
+            let qty = Math.max(1, parseInt(input.val()) - 1);
+            updateQuantity(id, qty);
+            input.val(qty);
+        });
+
+        // Delete item
+        $('.remove-item').click(function () {
+            const id = $(this).data('id');
+            if (confirm('Yakin ingin menghapus item ini?')) {
+                $.post('{{ route("cart.ajaxDelete") }}', {
+                    _token: '{{ csrf_token() }}',
+                    id: id
+                }, function (response) {
+                    if (response.success) {
+                        location.reload();
+                    }
+                });
+            }
+        });
+
+        function updateQuantity(id, qty) {
+    $.post('{{ route("cart.ajaxUpdate") }}', {
+        _token: '{{ csrf_token() }}',
+        id: id,
+        quantity: qty
+    }, function (response) {
+        if (response.success) {
+            location.reload(); // <-- Tambahkan ini agar summary ikut update
+        }
+    });
+}
+    });
+</script>

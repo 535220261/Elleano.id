@@ -49,3 +49,18 @@ class RegisterController extends Controller
         ]);
     }
 }
+
+// Di method showLoginForm (kalau kamu override), atau langsung di view
+
+if (request()->has('redirect')) {
+    $redirectReason = request()->get('redirect');
+
+    switch ($redirectReason) {
+        case 'add-to-cart':
+            session()->flash('message', 'Silakan login terlebih dahulu untuk menambahkan produk ke keranjang.');
+            break;
+        case 'cart':
+            session()->flash('message', 'Silakan login terlebih dahulu untuk melihat keranjang.');
+            break;
+    }
+}
