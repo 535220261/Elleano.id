@@ -75,6 +75,6 @@
 <!-- Footer -->
 <footer class="py-5 bg-dark">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Elleano.id 2024</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Elleano.id 2025</p>
     </div>
 </footer>

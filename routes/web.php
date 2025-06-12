@@ -18,6 +18,9 @@ Route::get('/popular-items', [HomeController::class, 'popularItems'])->name('pop
 Route::get('/new-arrivals', [HomeController::class, 'newArrivals'])->name('new-arrivals');
 
 // Routes untuk produk pada halaman admin
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admindashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+});
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
@@ -65,6 +68,8 @@ Route::get('/payment-transaction', function () {
 Route::get('/security', function () {
     return view('profile.security');
 })->name('security');
+Route::post('/change-password', [AccountController::class, 'changePassword'])->name('change.password');
+
 
 Route::get('/notifications', function () {
     return view('profile.notifications');

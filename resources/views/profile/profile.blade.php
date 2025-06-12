@@ -42,13 +42,10 @@
                                     style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover;">
                             </div>
                             <div class="modal-footer justify-content-center">
-                                <form action="{{ route('profile-picture.edit') }}" method="GET" class="d-inline">
-                                    <button type="submit" class="btn btn-primary">Edit</button>
-                                </form>
-                                <form action="{{ route('profile-picture.destroy') }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this picture?');">
+                                <form action="{{ route('profile-picture.destroy') }}" method="POST" class="d-inline" onsubmit="return confirm('Apa kamu yakin ingin menghapus foto ini?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-danger">Hapus</button>
                                 </form>
                             </div>
                         </div>
@@ -99,12 +96,10 @@
                 <form method="POST" action="{{ route('profile.update') }}">
                     @csrf
                     @method('PUT')
-
                     <div class="mb-3">
                         <label class="small mb-1" for="inputUsername">Username</label>
                         <input class="form-control readonly-field" id="inputUsername" name="username" type="text" value="{{ Auth::user()->username }}">
                     </div>
-
                     <div class="row gx-3 mb-3">
                         <div class="col-md-6">
                             <label class="small mb-1" for="inputFirstName">First Name</label>
@@ -115,8 +110,6 @@
                             <input class="form-control readonly-field" id="inputLastName" name="last_name" type="text" value="{{ Auth::user()->last_name }}">
                         </div>
                     </div>
-
-
                     <div class="mb-3">
                         <label class="small mb-1" for="inputLocation">Location</label>
                         <input class="form-control readonly-field" id="inputLocation" name="location" type="text" value="{{ Auth::user()->location }}">

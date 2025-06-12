@@ -12,6 +12,20 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('images/elleano.png') }}">
   
     @include('layouts.navbar_account')
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
         <hr class="mt-0 mb-4">
         <div class="row">
             <div class="col-lg-8">
@@ -19,24 +33,41 @@
                 <div class="card mb-4">
                     <div class="card-header">Change Password</div>
                     <div class="card-body">
-                        <form>
-                            <!-- Form Group (current password)-->
-                            <div class="mb-3">
-                                <label class="small mb-1" for="currentPassword">Current Password</label>
-                                <input class="form-control" id="currentPassword" type="password" placeholder="Enter current password">
-                            </div>
-                            <!-- Form Group (new password)-->
-                            <div class="mb-3">
-                                <label class="small mb-1" for="newPassword">New Password</label>
-                                <input class="form-control" id="newPassword" type="password" placeholder="Enter new password">
-                            </div>
-                            <!-- Form Group (confirm password)-->
-                            <div class="mb-3">
-                                <label class="small mb-1" for="confirmPassword">Confirm Password</label>
-                                <input class="form-control" id="confirmPassword" type="password" placeholder="Confirm new password">
-                            </div>
-                            <button class="btn btn-primary" type="button">Save</button>
-                        </form>
+<form method="POST" action="{{ route('change.password') }}">
+    @csrf
+    <!-- Form Group (current password)-->
+    <div class="mb-3">
+        <label class="small mb-1" for="currentPassword">Current Password</label>
+        <input class="form-control" id="currentPassword" name="current_password" type="password" placeholder="Enter current password" required>
+    </div>
+    <!-- Form Group (new password)-->
+    <div class="mb-3">
+        <label class="small mb-1" for="newPassword">New Password</label>
+        <input class="form-control" id="newPassword" name="new_password" type="password" placeholder="Enter new password" required>
+    </div>
+    <!-- Form Group (confirm password)-->
+    <div class="mb-3">
+        <label class="small mb-1" for="confirmPassword">Confirm Password</label>
+        <input class="form-control" id="confirmPassword" name="new_password_confirmation" type="password" placeholder="Confirm new password" required>
+    </div>
+
+    <!-- Checkbox Show Password -->
+    <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="showPasswordCheck">
+        <label class="form-check-label" for="showPasswordCheck">Show Password</label>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+<script>
+    document.getElementById('showPasswordCheck').addEventListener('change', function () {
+        const toggleFields = ['currentPassword', 'newPassword', 'confirmPassword'];
+        toggleFields.forEach(id => {
+            const field = document.getElementById(id);
+            field.type = this.checked ? 'text' : 'password';
+        });
+    });
+</script>
                     </div>
                 </div>
                 <!-- Security preferences card-->

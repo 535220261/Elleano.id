@@ -48,10 +48,10 @@
 <div class="d-flex">
     @if (session('user_name'))
         <a href="{{ route('profile') }}" class="d-flex align-items-center text-decoration-none">
-            <img src="{{ session('user_avatar') ? asset('storage/' . session('user_avatar')) : asset('images/avatar.png') }}"
-                alt="User Avatar"
-                class="rounded-circle me-2"
-                style="width: 40px; height: 40px; object-fit: cover;">
+                    <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('images/avatar.png') }}"
+                    alt="Profile Picture"
+                    class="rounded-circle me-2"
+                    style="width: 60px; height: 60px; object-fit: cover;">
             <span>Hi, {{ session('user_name') }}</span>
         </a>
     @else
@@ -65,3 +65,6 @@
         </div>
     </div>
 </nav>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

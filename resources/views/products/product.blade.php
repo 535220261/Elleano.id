@@ -66,7 +66,7 @@
                 <h2 class="mb-3">{{ $product->product_name }}</h2>
 
                 <div class="fs-4 fw-bold text-dark mb-3">
-                    IDR {{ number_format($product->price, 0, ',', '.') }}
+                    Rp {{ number_format($product->price, 0, ',', '.') }}
                 </div>
 
                 <!-- Short Description -->
@@ -99,12 +99,6 @@
 </section>
 
 @include('layouts.footer')
-
-<!-- Bootstrap core JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Bootstrap core JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core theme JS -->
 <script src="{{ asset('js/scripts.js') }}"></script>

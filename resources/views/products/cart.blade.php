@@ -14,6 +14,8 @@
     <!-- Bootstrap icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- Bootstrap core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -61,13 +63,15 @@
                     </div>
                 @endforeach
             @else
-                <p>Your cart is empty!</p>
+                <p>Keranjangmu masih kosong!</p>
+                <br>
+                <p>Ayo cari produk Elleano untukmu!</p>
             @endif
 
             <!-- Continue Shopping Button -->
             <div class="text-start mb-4">
                 <a href="{{ route('all-products') }}" class="btn btn-outline-primary">
-                    <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                    <i class="bi bi-arrow-left me-2"></i>Lihat Semua Produk
                 </a>
             </div>
         </div>
@@ -124,7 +128,6 @@
 
 @include('layouts.footer')
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
         // Increase quantity

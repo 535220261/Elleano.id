@@ -28,12 +28,27 @@
             <h1>Login</h1>
             <input placeholder="Name" name="name" type="text" required>
             <br>
-            <input placeholder="Password" name="password" type="password" required>
+            <input placeholder="Password" id="password" name="password" type="password" required>
             <br>
+            <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="showPasswordCheck">
+        <label for="showPasswordCheck">Show Password</label>
+        </div>
             <button type="submit" class="sub">Login</button>
             <h6>Don't have an account?</h6>
             <a href="{{ route('register') }}">Create a new account</a>
         </form>
+        <script>
+    document.getElementById('showPasswordCheck').addEventListener('change', function () {
+        const passwordFields = ['password', 'password_confirmation'];
+        passwordFields.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.type = this.checked ? 'text' : 'password';
+            }
+        });
+    });
+</script>
     </div>
 </div>
 
@@ -64,8 +79,6 @@
 </div>
 
 
-<!-- Bootstrap core JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -76,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <!-- Include jQuery dan Bootstrap JS untuk modal -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 @if (session('error'))
     <!-- Script untuk menampilkan modal jika terdapat pesan kesalahan -->

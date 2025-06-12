@@ -21,16 +21,34 @@
         <form action="{{ route('register') }}" method="POST">
             @csrf
             <h1>Signup</h1>
-            <input placeholder="Name" name="name" type="text" required>
+
+            <input type="text" name="name" placeholder="Name" required>
             <br>
-            <input placeholder="Password" name="password" type="password" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
             <br>
-            <input placeholder="Confirm Password" name="password_confirmation" type="password" required>
+            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required>
             <br>
+
+        <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="showPasswordCheck">
+        <label for="showPasswordCheck">Show Password</label>
+        </div>
             <button type="submit" class="sub">Sign Up</button>
+<br>
             <h6>Already have an account?</h6>
             <a href="{{ route('login') }}">Login</a>
         </form>
+<script>
+    document.getElementById('showPasswordCheck').addEventListener('change', function () {
+        const passwordFields = ['password', 'password_confirmation'];
+        passwordFields.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.type = this.checked ? 'text' : 'password';
+            }
+        });
+    });
+</script>
     </div>
 </div>
 
